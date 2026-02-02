@@ -1,0 +1,1441 @@
+{
+  "processors": [
+    {
+      "id": 1,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-14900K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 2,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-13900K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 3,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i7-14700K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 4,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i7-13700K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 5,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-14600K",
+      "watts": 181,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 6,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-13600K",
+      "watts": 181,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 7,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-14400",
+      "watts": 148,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 8,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i3-14100",
+      "watts": 110,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 9,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i9-11900K",
+      "watts": 251,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 10,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i7-11700K",
+      "watts": 251,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 11,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i5-11600K",
+      "watts": 251,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 12,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 7950X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 13,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 7900X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 14,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 7 7800X3D",
+      "watts": 120,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 15,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 7 7700X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 16,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 5 7600X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 17,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 5 7600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 18,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 9 5950X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 19,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 9 5900X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 20,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 5800X3D",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 21,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 5800X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 22,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 5600X",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 23,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 5600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 24,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i9-10900K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 25,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i7-10700K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 26,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i5-10600K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 27,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i5-10400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 28,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i9-9900K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 29,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i7-9700K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 30,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-9600K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 31,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-9400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 32,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i9-8900K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 33,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i7-8700K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 34,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-8600K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 35,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-8400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 36,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i7-7700K",
+      "watts": 91,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 37,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-7600K",
+      "watts": 91,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 38,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-7400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 39,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i7-6700K",
+      "watts": 91,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 40,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-6600K",
+      "watts": 91,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 41,
+      "brand": "Intel",
+      "socket": "LGA1151",
+      "model": "Core i5-6400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 42,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i9-11900K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 43,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i7-11700K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 44,
+      "brand": "Intel",
+      "socket": "LGA1200",
+      "model": "Core i5-11600K",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 45,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-12900K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 46,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i7-12700K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 47,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-12600K",
+      "watts": 125,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 48,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-12400",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 49,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-13900K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 50,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-13900KS",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 51,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i7-13700K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 52,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-13600K",
+      "watts": 181,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 53,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-14900K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 54,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i9-14900KS",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 55,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i7-14700K",
+      "watts": 253,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 56,
+      "brand": "Intel",
+      "socket": "LGA1700",
+      "model": "Core i5-14600K",
+      "watts": 181,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 57,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 1800X",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 58,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 1600X",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 59,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 1600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 60,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 2700X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 61,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 2600X",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 62,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 2600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 63,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 9 3900X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 64,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 3700X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 65,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 3600X",
+      "watts": 95,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 66,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 3600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 67,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 9 5950X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 68,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 9 5900X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 69,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 5800X3D",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 70,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 7 5800X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 71,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 5600X",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 72,
+      "brand": "AMD",
+      "socket": "AM4",
+      "model": "Ryzen 5 5600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 73,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 7950X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 74,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 7900X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 75,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 7 7800X3D",
+      "watts": 120,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 76,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 7 7700X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 77,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 5 7600X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 78,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 5 7600",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 79,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 9950X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 80,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 9 9900X",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 81,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 7 9700X",
+      "watts": 105,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 82,
+      "brand": "AMD",
+      "socket": "AM5",
+      "model": "Ryzen 5 9600X",
+      "watts": 65,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    }
+  ],
+  "gpus": [
+    {
+      "id": 1,
+      "brand": "NVIDIA",
+      "model": "RTX 4090",
+      "series": "GeForce RTX 40",
+      "watts": 450,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 2,
+      "brand": "NVIDIA",
+      "model": "RTX 4080 Super",
+      "series": "GeForce RTX 40",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 3,
+      "brand": "NVIDIA",
+      "model": "RTX 4080",
+      "series": "GeForce RTX 40",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 4,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Ti Super",
+      "series": "GeForce RTX 40",
+      "watts": 285,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 5,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Ti",
+      "series": "GeForce RTX 40",
+      "watts": 285,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 6,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Super",
+      "series": "GeForce RTX 40",
+      "watts": 220,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 7,
+      "brand": "NVIDIA",
+      "model": "RTX 4070",
+      "series": "GeForce RTX 40",
+      "watts": 200,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 8,
+      "brand": "NVIDIA",
+      "model": "RTX 4060 Ti",
+      "series": "GeForce RTX 40",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 9,
+      "brand": "NVIDIA",
+      "model": "RTX 4060",
+      "series": "GeForce RTX 40",
+      "watts": 115,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 10,
+      "brand": "NVIDIA",
+      "model": "RTX 3090 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 450,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 11,
+      "brand": "NVIDIA",
+      "model": "RTX 3090",
+      "series": "GeForce RTX 30",
+      "watts": 350,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 12,
+      "brand": "NVIDIA",
+      "model": "RTX 3080 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 350,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 13,
+      "brand": "NVIDIA",
+      "model": "RTX 3080",
+      "series": "GeForce RTX 30",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 14,
+      "brand": "NVIDIA",
+      "model": "RTX 3070 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 290,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 15,
+      "brand": "NVIDIA",
+      "model": "RTX 3070",
+      "series": "GeForce RTX 30",
+      "watts": 220,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 16,
+      "brand": "NVIDIA",
+      "model": "RTX 3060 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 200,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 17,
+      "brand": "NVIDIA",
+      "model": "RTX 3060",
+      "series": "GeForce RTX 30",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 18,
+      "brand": "NVIDIA",
+      "model": "RTX 3050",
+      "series": "GeForce RTX 30",
+      "watts": 130,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 19,
+      "brand": "AMD",
+      "model": "RX 7900 XTX",
+      "series": "Radeon RX 7000",
+      "watts": 355,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 20,
+      "brand": "AMD",
+      "model": "RX 7900 XT",
+      "series": "Radeon RX 7000",
+      "watts": 315,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 21,
+      "brand": "AMD",
+      "model": "RX 7800 XT",
+      "series": "Radeon RX 7000",
+      "watts": 263,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 22,
+      "brand": "AMD",
+      "model": "RX 7700 XT",
+      "series": "Radeon RX 7000",
+      "watts": 245,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 23,
+      "brand": "AMD",
+      "model": "RX 7600 XT",
+      "series": "Radeon RX 7000",
+      "watts": 190,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 24,
+      "brand": "AMD",
+      "model": "RX 7600",
+      "series": "Radeon RX 7000",
+      "watts": 165,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 25,
+      "brand": "AMD",
+      "model": "RX 6950 XT",
+      "series": "Radeon RX 6000",
+      "watts": 335,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 26,
+      "brand": "AMD",
+      "model": "RX 6900 XT",
+      "series": "Radeon RX 6000",
+      "watts": 300,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 27,
+      "brand": "AMD",
+      "model": "RX 6800 XT",
+      "series": "Radeon RX 6000",
+      "watts": 300,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 28,
+      "brand": "AMD",
+      "model": "RX 6800",
+      "series": "Radeon RX 6000",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 29,
+      "brand": "AMD",
+      "model": "RX 6750 XT",
+      "series": "Radeon RX 6000",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 30,
+      "brand": "AMD",
+      "model": "RX 6700 XT",
+      "series": "Radeon RX 6000",
+      "watts": 230,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 31,
+      "brand": "AMD",
+      "model": "RX 6650 XT",
+      "series": "Radeon RX 6000",
+      "watts": 180,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 32,
+      "brand": "AMD",
+      "model": "RX 6600 XT",
+      "series": "Radeon RX 6000",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 33,
+      "brand": "AMD",
+      "model": "RX 6600",
+      "series": "Radeon RX 6000",
+      "watts": 132,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 34,
+      "brand": "AMD",
+      "model": "RX 6500 XT",
+      "series": "Radeon RX 6000",
+      "watts": 107,
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 35,
+      "brand": "NVIDIA",
+      "model": "GTX 1080 Ti",
+      "series": "GeForce GTX 10",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 36,
+      "brand": "NVIDIA",
+      "model": "GTX 1080",
+      "series": "GeForce GTX 10",
+      "watts": 180,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 37,
+      "brand": "NVIDIA",
+      "model": "GTX 1070",
+      "series": "GeForce GTX 10",
+      "watts": 150,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 38,
+      "brand": "NVIDIA",
+      "model": "GTX 1060",
+      "series": "GeForce GTX 10",
+      "watts": 120,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 39,
+      "brand": "NVIDIA",
+      "model": "RTX 2080 Ti",
+      "series": "GeForce RTX 20",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 40,
+      "brand": "NVIDIA",
+      "model": "RTX 2080",
+      "series": "GeForce RTX 20",
+      "watts": 215,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 41,
+      "brand": "NVIDIA",
+      "model": "RTX 2070",
+      "series": "GeForce RTX 20",
+      "watts": 175,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 42,
+      "brand": "NVIDIA",
+      "model": "RTX 2060",
+      "series": "GeForce RTX 20",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 43,
+      "brand": "NVIDIA",
+      "model": "RTX 3090 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 450,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 44,
+      "brand": "NVIDIA",
+      "model": "RTX 3090",
+      "series": "GeForce RTX 30",
+      "watts": 350,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 45,
+      "brand": "NVIDIA",
+      "model": "RTX 3080 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 350,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 46,
+      "brand": "NVIDIA",
+      "model": "RTX 3080",
+      "series": "GeForce RTX 30",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 47,
+      "brand": "NVIDIA",
+      "model": "RTX 3070 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 290,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 48,
+      "brand": "NVIDIA",
+      "model": "RTX 3070",
+      "series": "GeForce RTX 30",
+      "watts": 220,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 49,
+      "brand": "NVIDIA",
+      "model": "RTX 3060 Ti",
+      "series": "GeForce RTX 30",
+      "watts": 200,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 50,
+      "brand": "NVIDIA",
+      "model": "RTX 3060",
+      "series": "GeForce RTX 30",
+      "watts": 170,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 51,
+      "brand": "NVIDIA",
+      "model": "RTX 3050",
+      "series": "GeForce RTX 30",
+      "watts": 130,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 52,
+      "brand": "NVIDIA",
+      "model": "RTX 4090",
+      "series": "GeForce RTX 40",
+      "watts": 450,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 53,
+      "brand": "NVIDIA",
+      "model": "RTX 4080 Super",
+      "series": "GeForce RTX 40",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 54,
+      "brand": "NVIDIA",
+      "model": "RTX 4080",
+      "series": "GeForce RTX 40",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 55,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Ti Super",
+      "series": "GeForce RTX 40",
+      "watts": 285,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 56,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Ti",
+      "series": "GeForce RTX 40",
+      "watts": 285,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 57,
+      "brand": "NVIDIA",
+      "model": "RTX 4070 Super",
+      "series": "GeForce RTX 40",
+      "watts": 220,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 58,
+      "brand": "NVIDIA",
+      "model": "RTX 4070",
+      "series": "GeForce RTX 40",
+      "watts": 200,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 59,
+      "brand": "NVIDIA",
+      "model": "RTX 4060 Ti",
+      "series": "GeForce RTX 40",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 60,
+      "brand": "NVIDIA",
+      "model": "RTX 4060",
+      "series": "GeForce RTX 40",
+      "watts": 115,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 61,
+      "brand": "NVIDIA",
+      "model": "RTX 5090",
+      "series": "GeForce RTX 50",
+      "watts": 575,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 62,
+      "brand": "NVIDIA",
+      "model": "RTX 5080",
+      "series": "GeForce RTX 50",
+      "watts": 320,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 63,
+      "brand": "NVIDIA",
+      "model": "RTX 5070 Ti",
+      "series": "GeForce RTX 50",
+      "watts": 285,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 64,
+      "brand": "NVIDIA",
+      "model": "RTX 5070",
+      "series": "GeForce RTX 50",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 65,
+      "brand": "AMD",
+      "model": "RX 480",
+      "series": "Radeon RX 400",
+      "watts": 150,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 66,
+      "brand": "AMD",
+      "model": "RX 470",
+      "series": "Radeon RX 400",
+      "watts": 120,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 67,
+      "brand": "AMD",
+      "model": "RX 580",
+      "series": "Radeon RX 500",
+      "watts": 185,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 68,
+      "brand": "AMD",
+      "model": "RX 570",
+      "series": "Radeon RX 500",
+      "watts": 150,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 69,
+      "brand": "AMD",
+      "model": "RX Vega 64",
+      "series": "Radeon RX Vega",
+      "watts": 295,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 70,
+      "brand": "AMD",
+      "model": "RX Vega 56",
+      "series": "Radeon RX Vega",
+      "watts": 210,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 71,
+      "brand": "AMD",
+      "model": "RX 5700 XT",
+      "series": "Radeon RX 5000",
+      "watts": 225,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 72,
+      "brand": "AMD",
+      "model": "RX 5700",
+      "series": "Radeon RX 5000",
+      "watts": 180,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 73,
+      "brand": "AMD",
+      "model": "RX 5600 XT",
+      "series": "Radeon RX 5000",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 74,
+      "brand": "AMD",
+      "model": "RX 6950 XT",
+      "series": "Radeon RX 6000",
+      "watts": 335,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 75,
+      "brand": "AMD",
+      "model": "RX 6900 XT",
+      "series": "Radeon RX 6000",
+      "watts": 300,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 76,
+      "brand": "AMD",
+      "model": "RX 6800 XT",
+      "series": "Radeon RX 6000",
+      "watts": 300,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 77,
+      "brand": "AMD",
+      "model": "RX 6800",
+      "series": "Radeon RX 6000",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 78,
+      "brand": "AMD",
+      "model": "RX 6750 XT",
+      "series": "Radeon RX 6000",
+      "watts": 250,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 79,
+      "brand": "AMD",
+      "model": "RX 6700 XT",
+      "series": "Radeon RX 6000",
+      "watts": 230,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 80,
+      "brand": "AMD",
+      "model": "RX 6650 XT",
+      "series": "Radeon RX 6000",
+      "watts": 180,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 81,
+      "brand": "AMD",
+      "model": "RX 6600 XT",
+      "series": "Radeon RX 6000",
+      "watts": 160,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 82,
+      "brand": "AMD",
+      "model": "RX 6600",
+      "series": "Radeon RX 6000",
+      "watts": 132,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 83,
+      "brand": "AMD",
+      "model": "RX 7900 XTX",
+      "series": "Radeon RX 7000",
+      "watts": 355,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 84,
+      "brand": "AMD",
+      "model": "RX 7900 XT",
+      "series": "Radeon RX 7000",
+      "watts": 315,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 85,
+      "brand": "AMD",
+      "model": "RX 7800 XT",
+      "series": "Radeon RX 7000",
+      "watts": 263,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 86,
+      "brand": "AMD",
+      "model": "RX 7700 XT",
+      "series": "Radeon RX 7000",
+      "watts": 245,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 87,
+      "brand": "AMD",
+      "model": "RX 7600 XT",
+      "series": "Radeon RX 7000",
+      "watts": 190,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 88,
+      "brand": "AMD",
+      "model": "RX 7600",
+      "series": "Radeon RX 7000",
+      "watts": 165,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 89,
+      "brand": "AMD",
+      "model": "RX 8900 XT",
+      "series": "Radeon RX 8000",
+      "watts": 420,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 90,
+      "brand": "AMD",
+      "model": "RX 8800 XT",
+      "series": "Radeon RX 8000",
+      "watts": 360,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    },
+    {
+      "id": 91,
+      "brand": "AMD",
+      "model": "RX 8700 XT",
+      "series": "Radeon RX 8000",
+      "watts": 310,
+      "createdAt": "2026-02-02T18:39:44.000Z"
+    }
+  ],
+  "storageTypes": [
+    {
+      "id": 1,
+      "type": "HDD_3.5",
+      "wattsPerUnit": 8,
+      "description": "Disco duro mecánico 3.5 pulgadas (7200 RPM)",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 2,
+      "type": "HDD_2.5",
+      "wattsPerUnit": 3,
+      "description": "Disco duro mecánico 2.5 pulgadas (5400 RPM)",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 3,
+      "type": "SSD_SATA",
+      "wattsPerUnit": 3,
+      "description": "SSD SATA 2.5 pulgadas",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 4,
+      "type": "SSD_M2_SATA",
+      "wattsPerUnit": 3,
+      "description": "SSD M.2 SATA",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 5,
+      "type": "SSD_M2_NVME",
+      "wattsPerUnit": 5,
+      "description": "SSD M.2 NVMe PCIe 3.0",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 6,
+      "type": "SSD_M2_NVME_GEN4",
+      "wattsPerUnit": 8,
+      "description": "SSD M.2 NVMe PCIe 4.0",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    },
+    {
+      "id": 7,
+      "type": "SSD_M2_NVME_GEN5",
+      "wattsPerUnit": 12,
+      "description": "SSD M.2 NVMe PCIe 5.0",
+      "createdAt": "2026-02-02T18:26:55.000Z"
+    }
+  ]
+}

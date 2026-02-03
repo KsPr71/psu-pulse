@@ -1,16 +1,33 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList, Pressable, Alert } from "react-native";
-import { IconSymbol } from "./ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { StorageItem } from "@/shared/types";
+import { useState } from "react";
+import {
+    Alert,
+    FlatList,
+    Modal,
+    Pressable,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { IconSymbol } from "./ui/icon-symbol";
 
 interface StorageManagerProps {
-  storageTypes: Array<{ id: number; type: string; wattsPerUnit: number; description: string | null }>;
+  storageTypes: {
+    id: number;
+    type: string;
+    wattsPerUnit: number;
+    description: string | null;
+  }[];
   storage: StorageItem[];
   onUpdate: (storage: StorageItem[]) => void;
 }
 
-export function StorageManager({ storageTypes, storage, onUpdate }: StorageManagerProps) {
+export function StorageManager({
+  storageTypes,
+  storage,
+  onUpdate,
+}: StorageManagerProps) {
   const colors = useColors();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<number | null>(null);
@@ -45,7 +62,9 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
 
   return (
     <View className="bg-surface rounded-2xl p-4 border border-border">
-      <Text className="text-lg font-semibold text-foreground mb-3">Almacenamiento</Text>
+      <Text className="text-lg font-semibold text-foreground mb-3">
+        Almacenamiento
+      </Text>
 
       {/* Lista de almacenamiento agregado */}
       {storage.length > 0 && (
@@ -56,13 +75,20 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
               className="flex-row items-center justify-between bg-background rounded-xl p-3 border border-border"
             >
               <View className="flex-1">
-                <Text className="text-base text-foreground font-medium">{item.type}</Text>
+                <Text className="text-base text-foreground font-medium">
+                  {item.type}
+                </Text>
                 <Text className="text-sm text-muted">
-                  {item.quantity}x unidad{item.quantity > 1 ? "es" : ""} • {item.wattsPerUnit * item.quantity}W
+                  {item.quantity}x unidad{item.quantity > 1 ? "es" : ""} •{" "}
+                  {item.wattsPerUnit * item.quantity}W
                 </Text>
               </View>
               <TouchableOpacity onPress={() => handleRemove(index)}>
-                <IconSymbol name="xmark.circle.fill" size={24} color={colors.error} />
+                <IconSymbol
+                  name="xmark.circle.fill"
+                  size={24}
+                  color={colors.error}
+                />
               </TouchableOpacity>
             </View>
           ))}
@@ -74,8 +100,14 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
         onPress={() => setIsModalOpen(true)}
         className="flex-row items-center justify-center gap-2 bg-primary py-3 rounded-xl"
       >
-        <IconSymbol name="plus.circle.fill" size={20} color={colors.background} />
-        <Text className="text-background font-semibold">Agregar Almacenamiento</Text>
+        <IconSymbol
+          name="plus.circle.fill"
+          size={20}
+          color={colors.background}
+        />
+        <Text className="text-background font-semibold">
+          Agregar Almacenamiento
+        </Text>
       </TouchableOpacity>
 
       {/* Modal */}
@@ -84,14 +116,28 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
           <View className="bg-background rounded-t-3xl p-6 max-h-[65%] pb-8">
             {/* Header */}
             <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-xl font-bold text-foreground">Agregar Almacenamiento</Text>
-              <Pressable onPress={() => { setIsModalOpen(false); setSelectedType(null); setQuantity(1); }}>
-                <IconSymbol name="xmark.circle.fill" size={28} color={colors.muted} />
+              <Text className="text-xl font-bold text-foreground">
+                Agregar Almacenamiento
+              </Text>
+              <Pressable
+                onPress={() => {
+                  setIsModalOpen(false);
+                  setSelectedType(null);
+                  setQuantity(1);
+                }}
+              >
+                <IconSymbol
+                  name="xmark.circle.fill"
+                  size={28}
+                  color={colors.muted}
+                />
               </Pressable>
             </View>
 
             {/* Tipo */}
-            <Text className="text-sm text-muted mb-2">Tipo de almacenamiento</Text>
+            <Text className="text-sm text-muted mb-2">
+              Tipo de almacenamiento
+            </Text>
             <FlatList
               data={storageTypes}
               keyExtractor={(item) => item.id.toString()}
@@ -107,14 +153,18 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
                 >
                   <Text
                     className={`font-semibold ${
-                      selectedType === item.id ? "text-background" : "text-foreground"
+                      selectedType === item.id
+                        ? "text-background"
+                        : "text-foreground"
                     }`}
                   >
                     {item.type}
                   </Text>
                   <Text
                     className={`text-sm ${
-                      selectedType === item.id ? "text-background/80" : "text-muted"
+                      selectedType === item.id
+                        ? "text-background/80"
+                        : "text-muted"
                     }`}
                   >
                     {item.description} • {item.wattsPerUnit}W por unidad
@@ -133,7 +183,9 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
                 <Text className="text-2xl text-foreground">−</Text>
               </TouchableOpacity>
               <View className="flex-1 items-center">
-                <Text className="text-3xl font-bold text-foreground">{quantity}</Text>
+                <Text className="text-3xl font-bold text-foreground">
+                  {quantity}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() => setQuantity(quantity + 1)}
@@ -148,7 +200,9 @@ export function StorageManager({ storageTypes, storage, onUpdate }: StorageManag
               onPress={handleAdd}
               className="bg-primary py-4 rounded-xl"
             >
-              <Text className="text-center text-background text-lg font-bold">Agregar</Text>
+              <Text className="text-center text-background text-lg font-bold">
+                Agregar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

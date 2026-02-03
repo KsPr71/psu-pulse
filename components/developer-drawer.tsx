@@ -362,6 +362,7 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
                 borderTopColor: colors.border,
                 borderTopWidth: 1,
                 backgroundColor: colors.surface,
+                marginBottom: 30,
               }}
             >
               <Text

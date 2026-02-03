@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList, Pressable } from "react-native";
-import { IconSymbol } from "./ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
+import { useState } from "react";
+import { FlatList, Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { IconSymbol } from "./ui/icon-symbol";
 
 interface ComponentSelectorProps<T> {
   title: string;
@@ -54,7 +54,7 @@ export function ComponentSelector<T extends { id: number }>({
 
       <Modal visible={isOpen} animationType="slide" transparent>
         <View className="flex-1 bg-black/50 justify-end">
-          <View className="bg-background rounded-t-3xl max-h-[60%] pb-6">
+          <View className="bg-background rounded-t-3xl max-h-[60%] pb-16">
             {/* Header */}
             <View className="flex-row items-center justify-between p-4 border-b border-border">
               <Text className="text-xl font-bold text-foreground">{title}</Text>
@@ -68,6 +68,7 @@ export function ComponentSelector<T extends { id: number }>({
               <FlatList
                 data={groups}
                 keyExtractor={(group) => group}
+                contentContainerStyle={{ paddingBottom: 32 }}
                 renderItem={({ item: group }) => (
                   <TouchableOpacity
                     onPress={() => setSelectedGroup(group)}
@@ -95,6 +96,7 @@ export function ComponentSelector<T extends { id: number }>({
                 <FlatList
                   data={filteredItems}
                   keyExtractor={(item) => item.id.toString()}
+                  contentContainerStyle={{ paddingBottom: 32 }}
                   renderItem={({ item }) => (
                     <TouchableOpacity
                       onPress={() => handleSelect(item)}

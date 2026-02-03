@@ -1,6 +1,6 @@
 // Load environment variables with proper priority (system > .env)
-import "./scripts/load-env.js";
 import type { ExpoConfig } from "expo/config";
+import "./scripts/load-env.js";
 
 // Bundle ID format: space.manus.<project_name_dots>.<timestamp>
 // e.g., "my-app" created at 2024-01-15 10:30:45 -> "space.manus.my.app.t20240115103045"
@@ -31,7 +31,8 @@ const env = {
   appSlug: "psu-calculator-app",
   // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
-  logoUrl: "https://private-us-east-1.manuscdn.com/sessionFile/PkF5r4erXs10sVjLTuAuh5/sandbox/SjY07djw5DfC2Pq1eZj3qQ-img-1_1770057948000_na1fn_aWNvbi1ibHVl.png",
+  logoUrl:
+    "https://private-us-east-1.manuscdn.com/sessionFile/PkF5r4erXs10sVjLTuAuh5/sandbox/SjY07djw5DfC2Pq1eZj3qQ-img-1_1770057948000_na1fn_aWNvbi1ibHVl.png",
   scheme: schemeFromBundleId,
   iosBundleId: bundleId,
   androidPackage: bundleId,
@@ -49,9 +50,9 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
-    "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   android: {
     adaptiveIcon: {
@@ -88,7 +89,8 @@ const config: ExpoConfig = {
     [
       "expo-audio",
       {
-        microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone.",
+        microphonePermission:
+          "Allow $(PRODUCT_NAME) to access your microphone.",
       },
     ],
     [
@@ -123,6 +125,11 @@ const config: ExpoConfig = {
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
+  },
+  extra: {
+    eas: {
+      projectId: "5225a743-05d2-4be2-831f-3d042bcf7245",
+    },
   },
 };
 

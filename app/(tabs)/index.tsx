@@ -21,6 +21,7 @@ import {
 import { useConfig } from "@/lib/config-provider";
 import { calculatePSU, validateConfiguration } from "@/lib/psu-calculator";
 import { PCConfiguration, PSUCalculation } from "@/shared/types";
+import { router } from "expo-router";
 import { ComponentSelector } from "../../components/component-selector";
 import { PSUResult } from "../../components/psu-result";
 import { StorageManager } from "../../components/storage-manager";
@@ -302,7 +303,10 @@ export default function CalculatorScreen() {
           <View className="mt-4 gap-3">
             <TouchableOpacity
               className="bg-primary rounded-xl py-4 px-6"
-              onPress={handleCalculate}
+              onPress={() => {
+                handleCalculate();
+                router.push("/resumen");
+              }}
             >
               <Text className="text-background font-semibold text-center text-lg">
                 Calcular PSU Requerida

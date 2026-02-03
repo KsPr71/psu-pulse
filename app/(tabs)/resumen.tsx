@@ -73,7 +73,10 @@ export default function ResumenScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView className="flex-1 p-6">
+      <ScrollView
+        className="flex-1 p-6"
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <View className="gap-6">
           {/* Header */}
           <View className="items-center gap-2">

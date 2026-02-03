@@ -3,6 +3,7 @@ import { useThemeContext } from "@/lib/theme-provider";
 import { router } from "expo-router";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { IconSymbol } from "./ui/icon-symbol";
+import Logo from "./ui/logo";
 
 interface DeveloperDrawerProps {
   isOpen: boolean;
@@ -64,26 +65,39 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
                   paddingBottom: 20,
                   borderBottomColor: colors.border,
                   borderBottomWidth: 1,
+                  flexDirection: "row",
                 }}
               >
-                <Text
+                <Logo width={60} height={60} />
+                <View
                   style={{
-                    fontSize: 24,
-                    fontWeight: "700",
-                    color: colors.foreground,
-                    marginBottom: 4,
+                    flex: 1,
+                    flexDirection: "column",
+                    // marginLeft: 12,
+
+                    alignItems: "center",
+                    marginTop: 10,
                   }}
                 >
-                  PSU Pulse
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: colors.muted,
-                  }}
-                >
-                  v1.0.0
-                </Text>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      fontWeight: "700",
+                      color: colors.foreground,
+                      marginBottom: 4,
+                    }}
+                  >
+                    PSU Pulse
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.muted,
+                    }}
+                  >
+                    v1.0.0
+                  </Text>
+                </View>
               </View>
 
               {/* Modo Oscuro/Claro */}

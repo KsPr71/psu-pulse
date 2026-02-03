@@ -1,12 +1,12 @@
+import { DeveloperDrawer } from "@/components/developer-drawer";
+import { HapticTab } from "@/components/haptic-tab";
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import Logo from "@/components/ui/logo";
+import { useColors } from "@/hooks/use-colors";
 import { Tabs } from "expo-router";
 import { useState } from "react";
 import { Platform, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { DeveloperDrawer } from "@/components/developer-drawer";
-import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { useColors } from "@/hooks/use-colors";
 
 export default function TabLayout() {
   const colors = useColors();
@@ -21,7 +21,9 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: colors.tint,
           headerShown: true,
+
           tabBarButton: HapticTab,
+          headerLeft: () => <Logo width={24} height={24} style={{ marginLeft: 16, marginRight: 8 }} />,
           headerRight: () => (
             <Pressable
               onPress={() => setDrawerOpen(true)}

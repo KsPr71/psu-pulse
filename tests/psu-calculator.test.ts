@@ -1,5 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { calculatePSU, validateConfiguration } from "../lib/psu-calculator";
+import { describe, expect, it } from "vitest";
+import {
+    calculatePSU,
+    calculatePSUWithOverclock,
+    validateConfiguration,
+} from "../lib/psu-calculator";
 import type { PCConfiguration } from "../shared/types";
 
 describe("PSU Calculator", () => {
@@ -9,6 +13,7 @@ describe("PSU Calculator", () => {
     socket: "LGA1700",
     model: "Core i9-13900K",
     watts: 253,
+    maxPowerOc: 340,
   };
 
   const mockGPU = {
@@ -17,11 +22,14 @@ describe("PSU Calculator", () => {
     series: "GeForce RTX 40",
     model: "RTX 4090",
     watts: 450,
+    maxPowerOc: 550,
   };
 
   const baseConfig: PCConfiguration = {
     processor: mockProcessor,
     gpu: mockGPU,
+    motherboard: null,
+    cooling: null,
     ramType: "DDR5",
     ramModules: 2,
     storage: [],
@@ -35,17 +43,15 @@ describe("PSU Calculator", () => {
   describe("calculatePSU", () => {
     it("should calculate total watts correctly with processor and GPU", () => {
       const result = calculatePSU(baseConfig);
-      
-      // Base motherboard (80) + Processor (253) + GPU (450) + RAM DDR5 (5*2=10)
-      // Total: 80 + 253 + 450 + 10 = 793W
-      expect(result.totalWatts).toBe(793);
+      // Base motherboard default (40) + Processor (253) + GPU (450) + RAM DDR5 (5*2=10)
+      // Total: 40 + 253 + 450 + 10 = 753W
+      expect(result.totalWatts).toBe(753);
     });
 
     it("should apply 25% safety margin", () => {
       const result = calculatePSU(baseConfig);
-      
-      // 793 * 1.25 = 991.25, rounded up to 1000
-      expect(result.recommendedPSU).toBe(1000);
+      // 753 * 1.25 = 941.25, rounded up to 950
+      expect(result.recommendedPSU).toBe(950);
       expect(result.safetyMargin).toBe(0.25);
     });
 
@@ -58,9 +64,9 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(config);
-      // 80 + 100 + 200 + 5 = 385W
-      // 385 * 1.25 = 481.25, rounds to 500W
-      expect(result.recommendedPSU).toBeGreaterThanOrEqual(500);
+      // 40 + 100 + 200 + 5 = 345W
+      // 345 * 1.25 = 431.25, rounds to 450W
+      expect(result.recommendedPSU).toBeGreaterThanOrEqual(450);
     });
 
     it("should include storage consumption", () => {
@@ -73,10 +79,8 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(config);
-      // Base: 80 + 253 + 450 + 10 = 793
-      // Storage: 5*2 + 8*1 = 18
-      // Total: 811W
-      expect(result.totalWatts).toBe(811);
+      // Base: 40 + 253 + 450 + 10 = 753, Storage: 5*2 + 8*1 = 18, Total: 771W
+      expect(result.totalWatts).toBe(771);
     });
 
     it("should include PCI Express cards consumption", () => {
@@ -88,8 +92,8 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(config);
-      // Base: 793 + 10 (1x4) + 15 (1x8) + 25 (1x16) = 843W
-      expect(result.totalWatts).toBe(843);
+      // Base: 753 + 10 + 15 + 25 = 803W
+      expect(result.totalWatts).toBe(803);
     });
 
     it("should include optical drives and fans", () => {
@@ -100,8 +104,8 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(config);
-      // Base: 793 + 25 (optical) + 20 (4 fans * 5) = 838W
-      expect(result.totalWatts).toBe(838);
+      // Base: 753 + 25 + 20 = 798W
+      expect(result.totalWatts).toBe(798);
     });
 
     it("should recommend correct efficiency rating", () => {
@@ -136,8 +140,8 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(ddr4Config);
-      // Base: 80 + 253 + 450 + (3*4=12) = 795W
-      expect(result.totalWatts).toBe(795);
+      // Base: 40 + 253 + 450 + (3*4=12) = 755W
+      expect(result.totalWatts).toBe(755);
     });
 
     it("should handle no RAM configuration", () => {
@@ -148,8 +152,85 @@ describe("PSU Calculator", () => {
       };
 
       const result = calculatePSU(noRamConfig);
-      // Base: 80 + 253 + 450 = 783W
-      expect(result.totalWatts).toBe(783);
+      // Base: 40 + 253 + 450 = 743W
+      expect(result.totalWatts).toBe(743);
+    });
+
+    it("should include motherboard and cooling consumption", () => {
+      const config: PCConfiguration = {
+        ...baseConfig,
+        motherboard: {
+          id: 3,
+          tier: "Gama alta",
+          chipsetExamples: "Z790",
+          powerConsumption: 50,
+          additionalRGBPower: 25,
+          cpuPowerLimit: 400,
+          description: "OC",
+          supportsOverclock: true,
+        },
+        cooling: {
+          id: 5,
+          size: "360mm",
+          fanCount: 3,
+          radiatorThickness: "27mm",
+          pumpPower: 4,
+          fanPower: 9,
+          totalPower: 13,
+          maxTdpDissipation: 400,
+          description: "AIO 360mm",
+        },
+      };
+
+      const result = calculatePSU(config);
+      // Base: 50 (mobo) + 4+9 (cooling pump+fan) + 253 + 450 + 10 = 776W
+      expect(result.totalWatts).toBe(776);
+    });
+  });
+
+  describe("calculatePSUWithOverclock", () => {
+    it("should return overclocked result when motherboard supports OC", () => {
+      const config: PCConfiguration = {
+        ...baseConfig,
+        motherboard: {
+          id: 3,
+          tier: "Gama alta",
+          chipsetExamples: "Z790",
+          powerConsumption: 50,
+          additionalRGBPower: 25,
+          cpuPowerLimit: 400,
+          description: "OC",
+          supportsOverclock: true,
+        },
+      };
+
+      const result = calculatePSUWithOverclock(config);
+      expect(result.overclockAvailable).toBe(true);
+      expect(result.overclocked).toBeDefined();
+      expect(result.overclocked!.totalWatts).toBeGreaterThan(result.normal.totalWatts);
+      // OC: 40 + 340 + 550 + 10 = 940 (no mobo in base for this test - we have motherboard)
+      // With mobo 50: 50 + 340 + 550 + 10 = 950
+      expect(result.overclocked!.totalWatts).toBe(950);
+    });
+
+    it("should not return overclocked when motherboard does not support OC", () => {
+      const config: PCConfiguration = {
+        ...baseConfig,
+        motherboard: {
+          id: 1,
+          tier: "Gama baja",
+          chipsetExamples: "H610",
+          powerConsumption: 20,
+          additionalRGBPower: 5,
+          cpuPowerLimit: 125,
+          description: "Basic",
+          supportsOverclock: false,
+        },
+      };
+
+      const result = calculatePSUWithOverclock(config);
+      expect(result.overclockAvailable).toBe(false);
+      expect(result.overclocked).toBeUndefined();
     });
   });
 
@@ -167,11 +248,26 @@ describe("PSU Calculator", () => {
       expect(result.errors).toContain("Debe seleccionar un procesador");
     });
 
-    it("should require GPU", () => {
-      const config = { ...baseConfig, gpu: null };
+    it("should allow GPU to be null (integrated graphics)", () => {
+      const config = {
+        ...baseConfig,
+        gpu: null,
+        processor: mockProcessor,
+        ramType: "DDR5" as const,
+        ramModules: 2,
+      };
       const result = validateConfiguration(config);
-      expect(result.valid).toBe(false);
-      expect(result.errors).toContain("Debe seleccionar una GPU");
+      expect(result.valid).toBe(true);
+    });
+
+    it("should include integrated GPU consumption when GPU is null", () => {
+      const config: PCConfiguration = {
+        ...baseConfig,
+        gpu: null,
+      };
+      const result = calculatePSU(config);
+      // Base: 40 + 25 (iGPU) + 253 + 10 = 328W
+      expect(result.totalWatts).toBe(328);
     });
 
     it("should require RAM configuration", () => {

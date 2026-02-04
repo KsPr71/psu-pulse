@@ -3,19 +3,19 @@ import { useThemeContext } from "@/lib/theme-provider";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import {
-  Modal,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-  useWindowDimensions,
+    Modal,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+    useWindowDimensions,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
+    runOnJS,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
 } from "react-native-reanimated";
 import { IconSymbol } from "./ui/icon-symbol";
 import Logo from "./ui/logo";

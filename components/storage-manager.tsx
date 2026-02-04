@@ -17,7 +17,7 @@ interface StorageManagerProps {
     id: number;
     type: string;
     wattsPerUnit: number;
-    description: string | null;
+    description?: string | null;
   }[];
   storage: StorageItem[];
   onUpdate: (storage: StorageItem[]) => void;
@@ -167,7 +167,7 @@ export function StorageManager({
                         : "text-muted"
                     }`}
                   >
-                    {item.description} • {item.wattsPerUnit}W por unidad
+                    {(item.description || item.type)} • {item.wattsPerUnit}W por unidad
                   </Text>
                 </TouchableOpacity>
               )}

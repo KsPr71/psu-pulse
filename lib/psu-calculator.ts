@@ -1,76 +1,130 @@
-import { PCConfiguration, PSUCalculation } from "@/shared/types";
+import {
+    PCConfiguration,
+    PSUCalculation,
+    PSUCalculationWithOC,
+} from "@/shared/types";
 
-// Consumos base de componentes en watts
+// Consumos base cuando no hay datos específicos
 const BASE_CONSUMPTION = {
-  motherboard: 80, // Placa base
-  ramDDR4PerModule: 3, // RAM DDR4 por módulo
-  ramDDR5PerModule: 5, // RAM DDR5 por módulo
-  pciExpress1x4: 10, // Tarjeta PCI Express 1x4
-  pciExpress1x8: 15, // Tarjeta PCI Express 1x8
-  pciExpress1x16: 25, // Tarjeta PCI Express 1x16 (sin GPU)
-  opticalDrive: 25, // Unidad óptica
-  fan: 5, // Ventilador estándar
+  motherboardDefault: 40, // Fallback si no hay placa seleccionada
+  integratedGPU: 25, // Gráfica integrada en CPU/placa base (~15-35W)
+  ramDDR4PerModule: 3,
+  ramDDR5PerModule: 5,
+  pciExpress1x4: 10,
+  pciExpress1x8: 15,
+  pciExpress1x16: 25,
+  opticalDrive: 25,
+  fan: 5,
 };
 
-// Margen de seguridad recomendado (20-30%)
-const SAFETY_MARGIN = 0.25; // 25%
+const SAFETY_MARGIN = 0.25;
 
 /**
- * Calcula el consumo total de energía y recomienda una PSU adecuada
+ * Calcula consumo base (placa, RAM, storage, PCIe, ópticas, ventiladores, refrigeración)
+ * Excluye CPU y GPU para poder variar entre TDP normal y overclock
  */
-export function calculatePSU(config: PCConfiguration): PSUCalculation {
-  let totalWatts = 0;
+function getBaseConsumption(config: PCConfiguration): number {
+  let total = 0;
 
-  // Consumo base de la placa base
-  totalWatts += BASE_CONSUMPTION.motherboard;
-
-  // Procesador
-  if (config.processor) {
-    totalWatts += config.processor.watts;
-  }
-
-  // GPU
-  if (config.gpu) {
-    totalWatts += config.gpu.watts;
+  // Motherboard - usa powerConsumption del tier seleccionado
+  if (config.motherboard) {
+    total += config.motherboard.powerConsumption;
+  } else {
+    total += BASE_CONSUMPTION.motherboardDefault;
   }
 
   // RAM
   if (config.ramType === "DDR4") {
-    totalWatts += BASE_CONSUMPTION.ramDDR4PerModule * config.ramModules;
+    total += BASE_CONSUMPTION.ramDDR4PerModule * config.ramModules;
   } else if (config.ramType === "DDR5") {
-    totalWatts += BASE_CONSUMPTION.ramDDR5PerModule * config.ramModules;
+    total += BASE_CONSUMPTION.ramDDR5PerModule * config.ramModules;
   }
 
   // Almacenamiento
-  config.storage.forEach((storage) => {
-    totalWatts += storage.wattsPerUnit * storage.quantity;
+  config.storage.forEach((s) => {
+    total += s.wattsPerUnit * s.quantity;
   });
 
-  // Tarjetas PCI Express
-  totalWatts += BASE_CONSUMPTION.pciExpress1x4 * config.pciExpress1x4;
-  totalWatts += BASE_CONSUMPTION.pciExpress1x8 * config.pciExpress1x8;
-  totalWatts += BASE_CONSUMPTION.pciExpress1x16 * config.pciExpress1x16;
+  // PCI Express
+  total += BASE_CONSUMPTION.pciExpress1x4 * config.pciExpress1x4;
+  total += BASE_CONSUMPTION.pciExpress1x8 * config.pciExpress1x8;
+  total += BASE_CONSUMPTION.pciExpress1x16 * config.pciExpress1x16;
+  total += BASE_CONSUMPTION.opticalDrive * config.opticalDrives;
 
-  // Unidades ópticas
-  totalWatts += BASE_CONSUMPTION.opticalDrive * config.opticalDrives;
+  // Ventiladores adicionales
+  total += BASE_CONSUMPTION.fan * config.fans;
 
-  // Ventiladores
-  totalWatts += BASE_CONSUMPTION.fan * config.fans;
+  // Refrigeración AIO - consumo de bomba + ventiladores (NO maxTdpDissipation)
+  if (config.cooling) {
+    total += config.cooling.pumpPower + config.cooling.fanPower;
+  }
 
-  // Calcular PSU recomendado con margen de seguridad
+  return total;
+}
+
+function buildPSUResult(totalWatts: number): PSUCalculation {
   const recommendedWatts = Math.ceil(totalWatts * (1 + SAFETY_MARGIN));
-
-  // Redondear al valor estándar de PSU más cercano
   const recommendedPSU = getStandardPSUWattage(recommendedWatts);
-
-  // Determinar eficiencia recomendada
   const efficiency = getRecommendedEfficiency(recommendedPSU);
-
   return {
     totalWatts: Math.round(totalWatts),
     recommendedPSU,
     efficiency,
     safetyMargin: SAFETY_MARGIN,
+  };
+}
+
+/**
+ * Calcula el consumo total y recomienda PSU (modo normal)
+ */
+export function calculatePSU(config: PCConfiguration): PSUCalculation {
+  let totalWatts = getBaseConsumption(config);
+
+  if (config.processor) totalWatts += config.processor.watts;
+  if (config.gpu) {
+    totalWatts += config.gpu.watts;
+  } else {
+    totalWatts += BASE_CONSUMPTION.integratedGPU; // Gráfica integrada
+  }
+
+  return buildPSUResult(totalWatts);
+}
+
+/**
+ * Calcula ambos resultados: normal y overclock (si la placa lo permite)
+ */
+export function calculatePSUWithOverclock(
+  config: PCConfiguration
+): PSUCalculationWithOC {
+  const baseWatts = getBaseConsumption(config);
+
+  const cpuWatts = config.processor?.watts ?? 0;
+  const gpuWatts = config.gpu?.watts ?? BASE_CONSUMPTION.integratedGPU;
+  const totalNormal = baseWatts + cpuWatts + gpuWatts;
+
+  const supportsOverclock =
+    config.motherboard?.supportsOverclock ?? false;
+  const hasOverclockData =
+    (config.processor?.maxPowerOc != null) ||
+    (config.gpu != null && config.gpu.maxPowerOc != null);
+
+  const overclockAvailable = supportsOverclock && hasOverclockData;
+
+  let overclocked: PSUCalculation | undefined;
+
+  if (overclockAvailable) {
+    const cpuOc = config.processor?.maxPowerOc ?? config.processor?.watts ?? 0;
+    const gpuOc = config.gpu
+      ? (config.gpu.maxPowerOc ?? config.gpu.watts)
+      : BASE_CONSUMPTION.integratedGPU; // iGPU sin overclock significativo
+    const totalOc = baseWatts + cpuOc + gpuOc;
+    overclocked = buildPSUResult(totalOc);
+  }
+
+  return {
+    normal: buildPSUResult(totalNormal),
+    overclocked,
+    overclockAvailable,
   };
 }
 
@@ -123,9 +177,7 @@ export function validateConfiguration(config: PCConfiguration): {
     errors.push("Debe seleccionar un procesador");
   }
 
-  if (!config.gpu) {
-    errors.push("Debe seleccionar una GPU");
-  }
+  // GPU es opcional: null = gráfica integrada
 
   if (!config.ramType || config.ramModules === 0) {
     errors.push("Debe configurar la memoria RAM");

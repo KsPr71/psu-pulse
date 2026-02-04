@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react";
 import {
-  getProcessors,
-  getGPUs,
-  getStorageTypes,
-  getProcessorBrands,
-  getGPUBrands,
+    getAiOCoolers,
+    getGPUBrands,
+    getGPUs,
+    getMotherboardTiers,
+    getProcessorBrands,
+    getProcessors,
+    getStorageTypes,
 } from "@/lib/data-loader";
-import { Processor, GPU, StorageType } from "@/shared/types";
+import {
+    AiOCooler,
+    GPU,
+    MotherboardTier,
+    Processor,
+    StorageType,
+} from "@/shared/types";
+import { useEffect, useState } from "react";
 
 export function useProcessors() {
   const [data, setData] = useState<Processor[]>([]);
@@ -45,6 +53,36 @@ export function useStorageTypes() {
 
   useEffect(() => {
     getStorageTypes()
+      .then(setData)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { data, loading, error };
+}
+
+export function useMotherboardTiers() {
+  const [data, setData] = useState<MotherboardTier[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    getMotherboardTiers()
+      .then(setData)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { data, loading, error };
+}
+
+export function useAiOCoolers() {
+  const [data, setData] = useState<AiOCooler[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    getAiOCoolers()
       .then(setData)
       .catch(setError)
       .finally(() => setLoading(false));

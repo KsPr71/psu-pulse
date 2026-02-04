@@ -3,7 +3,8 @@ import { useConfig } from "@/lib/config-provider";
 import { ScrollView, Text, View } from "react-native";
 
 const BASE_CONSUMPTION = {
-  motherboard: 80,
+  motherboardDefault: 40,
+  integratedGPU: 25,
   ramDDR4PerModule: 3,
   ramDDR5PerModule: 5,
   pciExpress1x4: 10,
@@ -14,23 +15,24 @@ const BASE_CONSUMPTION = {
 };
 
 export default function ResumenScreen() {
-  const { config, result } = useConfig();
+  const { config, result, resultWithOC } = useConfig();
 
   const calculateTotalTDP = () => {
     let total = 0;
 
-    // Motherboard
-    total += BASE_CONSUMPTION.motherboard;
+    total += config.motherboard?.powerConsumption ?? BASE_CONSUMPTION.motherboardDefault;
+
+    if (config.cooling) {
+      total += config.cooling.pumpPower + config.cooling.fanPower;
+    }
 
     // Processor
     if (config.processor) {
       total += config.processor.watts;
     }
 
-    // GPU
-    if (config.gpu) {
-      total += config.gpu.watts;
-    }
+    // GPU (dedicada o integrada)
+    total += config.gpu ? config.gpu.watts : BASE_CONSUMPTION.integratedGPU;
 
     // RAM
     if (config.ramType === "DDR4") {
@@ -61,6 +63,8 @@ export default function ResumenScreen() {
   const hasConfiguration =
     config.processor ||
     config.gpu ||
+    config.motherboard ||
+    config.cooling ||
     config.ramModules > 0 ||
     config.storage.length > 0 ||
     config.opticalDrives > 0 ||
@@ -68,6 +72,12 @@ export default function ResumenScreen() {
     config.pciExpress1x8 > 0 ||
     config.pciExpress1x16 > 0 ||
     config.fans > 0;
+
+  const displayResult =
+    resultWithOC ??
+    (result
+      ? { normal: result, overclockAvailable: false, overclocked: undefined }
+      : null);
 
   const totalTDP = calculateTotalTDP();
 
@@ -107,13 +117,35 @@ export default function ResumenScreen() {
                 <View className="gap-3">
                   {/* Motherboard */}
                   <View className="flex-row justify-between items-center py-2 px-3 bg-background rounded-lg">
-                    <Text className="text-base text-foreground">
-                      Placa Base
-                    </Text>
+                    <View className="flex-1">
+                      <Text className="text-base text-foreground">
+                        Placa Base
+                      </Text>
+                      <Text className="text-sm text-muted">
+                        {config.motherboard?.tier ?? "Por defecto"}
+                      </Text>
+                    </View>
                     <Text className="font-semibold text-primary">
-                      {BASE_CONSUMPTION.motherboard}W
+                      {config.motherboard?.powerConsumption ?? BASE_CONSUMPTION.motherboardDefault}W
                     </Text>
                   </View>
+
+                  {/* Cooling */}
+                  {config.cooling && (
+                    <View className="flex-row justify-between items-center py-2 px-3 bg-background rounded-lg">
+                      <View className="flex-1">
+                        <Text className="text-base text-foreground">
+                          Refrigeración AIO {config.cooling.size}
+                        </Text>
+                        <Text className="text-sm text-muted">
+                          Bomba + ventiladores
+                        </Text>
+                      </View>
+                      <Text className="font-semibold text-primary">
+                        {config.cooling.pumpPower + config.cooling.fanPower}W
+                      </Text>
+                    </View>
+                  )}
 
                   {/* Processor */}
                   {config.processor && (
@@ -133,23 +165,34 @@ export default function ResumenScreen() {
                   )}
 
                   {/* GPU */}
-                  {config.gpu && (
-                    <View className="flex-row justify-between items-center py-2 px-3 bg-background rounded-lg">
-                      <View className="flex-1">
-                        <Text className="text-base font-semibold text-foreground">
-                          {config.gpu.brand} {config.gpu.model}
-                        </Text>
-                        {config.gpu.series && (
-                          <Text className="text-sm text-muted">
-                            {config.gpu.series}
+                  <View className="flex-row justify-between items-center py-2 px-3 bg-background rounded-lg">
+                    <View className="flex-1">
+                      {config.gpu ? (
+                        <>
+                          <Text className="text-base font-semibold text-foreground">
+                            {config.gpu.brand} {config.gpu.model}
                           </Text>
-                        )}
-                      </View>
-                      <Text className="font-semibold text-primary">
-                        {config.gpu.watts}W
-                      </Text>
+                          {config.gpu.series && (
+                            <Text className="text-sm text-muted">
+                              {config.gpu.series}
+                            </Text>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <Text className="text-base font-semibold text-foreground">
+                            Gráfica integrada
+                          </Text>
+                          <Text className="text-sm text-muted">
+                            GPU integrada en CPU/placa base
+                          </Text>
+                        </>
+                      )}
                     </View>
-                  )}
+                    <Text className="font-semibold text-primary">
+                      {config.gpu ? `${config.gpu.watts}W` : "~25W"}
+                    </Text>
+                  </View>
 
                   {/* RAM */}
                   {config.ramModules > 0 && (
@@ -277,29 +320,57 @@ export default function ResumenScreen() {
               </View>
 
               {/* Recommended PSU */}
-              {result && (
-                <View className="bg-success rounded-2xl p-4 border border-success">
-                  <Text className="text-lg font-bold text-white mb-2">
-                    PSU Recomendado
-                  </Text>
-                  <View className="flex-row justify-between items-center">
-                    <View>
-                      <Text className="text-3xl font-bold text-white">
-                        {result.recommendedPSU}W
-                      </Text>
-                      <Text className="text-sm text-white opacity-80 mt-1">
-                        {result.efficiency}
-                      </Text>
-                    </View>
-                    <View className="items-end">
-                      <Text className="text-sm text-white opacity-80">
-                        Margen de seguridad
-                      </Text>
-                      <Text className="text-lg font-semibold text-white">
-                        {Math.round(result.safetyMargin * 100)}%
-                      </Text>
+              {displayResult && (
+                <View className="gap-4">
+                  <View className="bg-success rounded-2xl p-4 border-2 border-success">
+                    <Text className="text-sm font-semibold text-white opacity-90 mb-1">
+                      PSU Recomendado (TDP normal)
+                    </Text>
+                    <View className="flex-row justify-between items-center">
+                      <View>
+                        <Text className="text-3xl font-bold text-white">
+                          {displayResult.normal.recommendedPSU}W
+                        </Text>
+                        <Text className="text-sm text-white opacity-80 mt-1">
+                          {displayResult.normal.efficiency}
+                        </Text>
+                      </View>
+                      <View className="items-end">
+                        <Text className="text-sm text-white opacity-80">
+                          Consumo: {displayResult.normal.totalWatts}W
+                        </Text>
+                        <Text className="text-lg font-semibold text-white">
+                          Margen {Math.round(displayResult.normal.safetyMargin * 100)}%
+                        </Text>
+                      </View>
                     </View>
                   </View>
+                  {displayResult.overclockAvailable &&
+                    displayResult.overclocked && (
+                    <View className="bg-primary rounded-2xl p-4 border-2 border-primary">
+                      <Text className="text-sm font-semibold text-white opacity-90 mb-1">
+                        PSU con Overclock (máx. CPU/GPU)
+                      </Text>
+                      <View className="flex-row justify-between items-center">
+                        <View>
+                          <Text className="text-3xl font-bold text-white">
+                            {displayResult.overclocked.recommendedPSU}W
+                          </Text>
+                          <Text className="text-sm text-white opacity-80 mt-1">
+                            {displayResult.overclocked.efficiency}
+                          </Text>
+                        </View>
+                        <View className="items-end">
+                          <Text className="text-sm text-white opacity-80">
+                            Consumo: {displayResult.overclocked.totalWatts}W
+                          </Text>
+                          <Text className="text-lg font-semibold text-white">
+                            Margen {Math.round(displayResult.overclocked.safetyMargin * 100)}%
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  )}
                 </View>
               )}
             </>

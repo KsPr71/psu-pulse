@@ -14,13 +14,18 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import {
+  useAiOCoolers,
   useGPUs,
+  useMotherboardTiers,
   useProcessors,
   useStorageTypes,
 } from "@/hooks/use-components";
 import { useConfig } from "@/lib/config-provider";
-import { calculatePSU, validateConfiguration } from "@/lib/psu-calculator";
-import { PCConfiguration, PSUCalculation } from "@/shared/types";
+import {
+  calculatePSUWithOverclock,
+  validateConfiguration,
+} from "@/lib/psu-calculator";
+import { PCConfiguration, PSUCalculationWithOC } from "@/shared/types";
 import { router } from "expo-router";
 import { ComponentSelector } from "../../components/component-selector";
 import { PSUResult } from "../../components/psu-result";
@@ -29,13 +34,14 @@ import { StorageManager } from "../../components/storage-manager";
 export default function CalculatorScreen() {
   const colors = useColors();
   const scrollViewRef = useRef<ScrollView>(null);
-  const { config, setConfig, setResult } = useConfig();
-
-  const [result, setLocalResult] = useState<PSUCalculation | null>(null);
+  const { config, setConfig, setResult, setResultWithOC } = useConfig();
+  const [resultWithOC, setLocalResult] = useState<PSUCalculationWithOC | null>(null);
 
   const { data: processors, loading: loadingProcessors } = useProcessors();
   const { data: gpus, loading: loadingGPUs } = useGPUs();
   const { data: storageTypes, loading: loadingStorage } = useStorageTypes();
+  const { data: motherboardTiers, loading: loadingMotherboards } = useMotherboardTiers();
+  const { data: aioCoolers, loading: loadingCoolers } = useAiOCoolers();
 
   const handleCalculate = () => {
     const validation = validateConfiguration(config);
@@ -49,14 +55,17 @@ export default function CalculatorScreen() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
 
-    const calculation = calculatePSU(config);
+    const calculation = calculatePSUWithOverclock(config);
     setLocalResult(calculation);
-    setResult(calculation); // Actualizar en contexto global
+    setResultWithOC(calculation);
+    setResult(calculation.normal);
 
-    // Desplazar al resultado después de un pequeño delay
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }, 100);
+
+    // Navegar tras confirmar el estado para que Resumen muestre el resultado
+    setTimeout(() => router.push("/resumen"), 50);
   };
 
   const handleReset = () => {
@@ -67,6 +76,8 @@ export default function CalculatorScreen() {
     setConfig({
       processor: null,
       gpu: null,
+      motherboard: null,
+      cooling: null,
       ramType: null,
       ramModules: 0,
       storage: [],
@@ -77,10 +88,16 @@ export default function CalculatorScreen() {
       fans: 0,
     });
     setLocalResult(null);
+    setResultWithOC(null);
     setResult(null);
   };
 
-  const isLoading = loadingProcessors || loadingGPUs || loadingStorage;
+  const isLoading =
+    loadingProcessors ||
+    loadingGPUs ||
+    loadingStorage ||
+    loadingMotherboards ||
+    loadingCoolers;
 
   if (isLoading) {
     return (
@@ -109,7 +126,7 @@ export default function CalculatorScreen() {
             </Text>
           </View>
 
-          {result && <PSUResult result={result} />}
+          {resultWithOC && <PSUResult result={resultWithOC} />}
 
           <ComponentSelector
             title="Procesador"
@@ -120,13 +137,47 @@ export default function CalculatorScreen() {
             groupBy="brand"
           />
 
+          <View className="gap-2">
+            <ComponentSelector
+              title="Tarjeta Gráfica (GPU)"
+              items={gpus}
+              selectedItem={config.gpu}
+              onSelect={(gpu) => setConfig({ ...config, gpu })}
+              renderItem={(g) => `${g.brand} ${g.model}`}
+              groupBy="brand"
+            />
+            <Pressable
+              onPress={() => setConfig({ ...config, gpu: null })}
+              className={`flex-row items-center justify-center py-2 px-3 rounded-xl border ${
+                !config.gpu
+                  ? "bg-primary/20 border-primary"
+                  : "bg-surface border-border"
+              }`}
+            >
+              <Text
+                className={`text-sm font-medium ${
+                  !config.gpu ? "text-primary" : "text-muted"
+                }`}
+              >
+                Usar gráfica integrada (~25W)
+              </Text>
+            </Pressable>
+          </View>
+
           <ComponentSelector
-            title="Tarjeta Gráfica (GPU)"
-            items={gpus}
-            selectedItem={config.gpu}
-            onSelect={(gpu) => setConfig({ ...config, gpu })}
-            renderItem={(g) => `${g.brand} ${g.model}`}
-            groupBy="brand"
+            title="Placa Base"
+            items={motherboardTiers}
+            selectedItem={config.motherboard}
+            onSelect={(mb) => setConfig({ ...config, motherboard: mb })}
+            renderItem={(m) => `${m.tier} — ${m.chipsetExamples}`}
+          />
+
+          <ComponentSelector
+            title="Refrigeración (AIO)"
+            items={aioCoolers}
+            selectedItem={config.cooling}
+            onSelect={(c) => setConfig({ ...config, cooling: c })}
+            renderItem={(c) => `${c.size} — ${c.description}`}
           />
 
           <View className="bg-surface rounded-2xl p-4 border border-border">
@@ -303,17 +354,14 @@ export default function CalculatorScreen() {
           <View className="mt-4 gap-3">
             <TouchableOpacity
               className="bg-primary rounded-xl py-4 px-6"
-              onPress={() => {
-                handleCalculate();
-                router.push("/resumen");
-              }}
+              onPress={handleCalculate}
             >
               <Text className="text-background font-semibold text-center text-lg">
                 Calcular PSU Requerida
               </Text>
             </TouchableOpacity>
 
-            {result && (
+            {resultWithOC && (
               <TouchableOpacity
                 className="bg-destructive/20 border border-destructive rounded-xl py-4 px-6"
                 onPress={handleReset}

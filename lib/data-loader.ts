@@ -1,14 +1,95 @@
-import { Processor, GPU, StorageType } from "@/shared/types";
 import { COMPONENTS_DATA_URL } from "@/constants/const";
+import {
+  AiOCooler,
+  GPU,
+  MotherboardTier,
+  Processor,
+  StorageType,
+} from "@/shared/types";
+
+interface RawProcessor {
+  id: number;
+  brand: string;
+  socket: string;
+  model: string;
+  series?: string;
+  tdp?: number;
+  watts?: number;
+  max_power_oc?: number;
+}
+
+interface RawGPU {
+  id: number;
+  brand: string;
+  model: string;
+  series?: string | null;
+  tdp?: number;
+  watts?: number;
+  max_power_oc?: number;
+}
+
+interface RawMotherboard {
+  id: number;
+  tier: string;
+  chipsetExamples: string;
+  powerConsumption: number;
+  additionalRGBPower: number;
+  cpuPowerLimit: number;
+  description: string;
+  [key: string]: unknown;
+}
 
 let cachedData: {
   processors: Processor[];
   gpus: GPU[];
   storageTypes: StorageType[];
+  motherboardTiers: MotherboardTier[];
+  aioCoolers: AiOCooler[];
 } | null = null;
 
 /** URL local para desarrollo cuando Supabase no está disponible */
 const FALLBACK_URL = "/data/components.json";
+
+function normalizeProcessor(p: RawProcessor): Processor {
+  const watts = p.tdp ?? p.watts ?? 0;
+  return {
+    id: p.id,
+    brand: p.brand,
+    socket: p.socket,
+    model: p.model,
+    series: p.series,
+    watts,
+    maxPowerOc: p.max_power_oc,
+  };
+}
+
+function normalizeGpu(g: RawGPU): GPU {
+  const watts = g.tdp ?? g.watts ?? 0;
+  return {
+    id: g.id,
+    brand: g.brand,
+    model: g.model,
+    series: g.series,
+    watts,
+    maxPowerOc: g.max_power_oc,
+  };
+}
+
+function normalizeMotherboard(m: RawMotherboard): MotherboardTier {
+  const tier = (m.tier ?? "").toLowerCase();
+  const supportsOverclock =
+    tier.includes("alta") || tier.includes("extrema");
+  return {
+    id: m.id,
+    tier: m.tier,
+    chipsetExamples: m.chipsetExamples,
+    powerConsumption: m.powerConsumption,
+    additionalRGBPower: m.additionalRGBPower,
+    cpuPowerLimit: m.cpuPowerLimit,
+    description: m.description,
+    supportsOverclock,
+  };
+}
 
 async function loadData() {
   if (cachedData) {
@@ -20,28 +101,29 @@ async function loadData() {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      // Fallback a JSON local si Supabase falla (ej. archivo no subido aún)
       if (url !== FALLBACK_URL) {
         console.warn(
           `Supabase unreachable (${response.status}), trying local fallback`
         );
         const fallback = await fetch(FALLBACK_URL);
         if (fallback.ok) {
-          cachedData = await fallback.json();
+          const raw = await fallback.json();
+          cachedData = transformData(raw);
           return cachedData;
         }
       }
       throw new Error(`Failed to load data: ${response.statusText}`);
     }
-    cachedData = await response.json();
+    const raw = await response.json();
+    cachedData = transformData(raw);
     return cachedData;
   } catch (error) {
-    // Fallback si fetch a Supabase falla por red/CORS
     if (url !== FALLBACK_URL) {
       try {
         const fallback = await fetch(FALLBACK_URL);
         if (fallback.ok) {
-          cachedData = await fallback.json();
+          const raw = await fallback.json();
+          cachedData = transformData(raw);
           return cachedData;
         }
       } catch {
@@ -51,6 +133,27 @@ async function loadData() {
     console.error("Error loading data:", error);
     throw error;
   }
+}
+
+function transformData(raw: Record<string, unknown>) {
+  const processors = ((raw.processors as RawProcessor[]) || []).map(normalizeProcessor);
+  const gpus = ((raw.gpus as RawGPU[]) || []).map(normalizeGpu);
+  const storageTypes = ((raw.storageTypes as StorageType[]) || []).map((s) => ({
+    ...s,
+    wattsPerUnit: s.wattsPerUnit ?? 0,
+  }));
+  const motherboardTiers = ((raw.motherboardTiers as RawMotherboard[]) || []).map(
+    normalizeMotherboard
+  );
+  const aioCoolers = (raw.aioCoolers as AiOCooler[]) || [];
+
+  return {
+    processors,
+    gpus,
+    storageTypes,
+    motherboardTiers,
+    aioCoolers,
+  };
 }
 
 export async function getProcessors(): Promise<Processor[]> {
@@ -65,7 +168,17 @@ export async function getGPUs(): Promise<GPU[]> {
 
 export async function getStorageTypes(): Promise<StorageType[]> {
   const data = await loadData();
-  return data?.storageTypes || []
+  return data?.storageTypes || [];
+}
+
+export async function getMotherboardTiers(): Promise<MotherboardTier[]> {
+  const data = await loadData();
+  return data?.motherboardTiers || [];
+}
+
+export async function getAiOCoolers(): Promise<AiOCooler[]> {
+  const data = await loadData();
+  return data?.aioCoolers || [];
 }
 
 export async function getProcessorsByBrand(brand: string): Promise<Processor[]> {

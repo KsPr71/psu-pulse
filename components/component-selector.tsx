@@ -1,6 +1,17 @@
 import { useColors } from "@/hooks/use-colors";
 import { useState } from "react";
-import { FlatList, Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { IconSymbol } from "./ui/icon-symbol";
 
 interface ComponentSelectorProps<T> {
@@ -23,19 +34,46 @@ export function ComponentSelector<T extends { id: number }>({
   const colors = useColors();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const groups = groupBy
     ? Array.from(new Set(items.map((item) => String(item[groupBy]))))
     : null;
 
-  const filteredItems = selectedGroup
+  const baseItems = selectedGroup
     ? items.filter((item) => String(item[groupBy as keyof T]) === selectedGroup)
     : items;
+
+  const searchLower = searchQuery.trim().toLowerCase();
+  const filteredGroups = searchLower
+    ? (groups ?? []).filter(
+        (g) =>
+          g.toLowerCase().includes(searchLower) ||
+          items.some(
+            (item) =>
+              String(item[groupBy as keyof T]) === g &&
+              renderItem(item).toLowerCase().includes(searchLower)
+          )
+      )
+    : groups;
+  const filteredItems = searchLower
+    ? baseItems.filter((item) =>
+        renderItem(item).toLowerCase().includes(searchLower)
+      )
+    : baseItems;
 
   const handleSelect = (item: T) => {
     onSelect(item);
     setIsOpen(false);
     setSelectedGroup(null);
+    setSearchQuery("");
+  };
+
+  const handleClose = () => {
+    Keyboard.dismiss();
+    setIsOpen(false);
+    setSelectedGroup(null);
+    setSearchQuery("");
   };
 
   return (
@@ -53,22 +91,67 @@ export function ComponentSelector<T extends { id: number }>({
       </TouchableOpacity>
 
       <Modal visible={isOpen} animationType="slide" transparent>
-        <View className="flex-1 bg-black/50 justify-end">
-          <View className="bg-background rounded-t-3xl max-h-[60%] pb-16">
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
+          <Pressable
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0,0,0,0.5)",
+            }}
+            onPress={handleClose}
+          />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            style={{ width: "100%", maxHeight: "70%" }}
+          >
+            <View className="bg-background rounded-t-3xl pb-16 overflow-hidden">
             {/* Header */}
             <View className="flex-row items-center justify-between p-4 border-b border-border">
               <Text className="text-xl font-bold text-foreground">{title}</Text>
-              <Pressable onPress={() => { setIsOpen(false); setSelectedGroup(null); }}>
+              <Pressable onPress={handleClose}>
                 <IconSymbol name="xmark.circle.fill" size={28} color={colors.muted} />
               </Pressable>
+            </View>
+
+            {/* Buscador */}
+            <View
+              className="flex-row items-center gap-2 px-4 py-3 border-b border-border bg-surface/50"
+              style={{ minHeight: 48 }}
+            >
+              <IconSymbol name="magnifyingglass" size={20} color={colors.muted} />
+              <TextInput
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                placeholder={`Buscar ${title.toLowerCase()}...`}
+                placeholderTextColor={colors.muted}
+                returnKeyType="search"
+                className="flex-1 text-base py-2"
+                style={{
+                  color: colors.foreground,
+                  fontSize: 16,
+                  paddingVertical: 8,
+                }}
+              />
             </View>
 
             {/* Groups */}
             {groups && !selectedGroup && (
               <FlatList
-                data={groups}
+                style={{ flexGrow: 0, maxHeight: 320 }}
+                data={filteredGroups ?? []}
                 keyExtractor={(group) => group}
                 contentContainerStyle={{ paddingBottom: 32 }}
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="on-drag"
+                ListEmptyComponent={
+                  <Text className="p-4 text-center text-muted">
+                    Sin resultados
+                  </Text>
+                }
                 renderItem={({ item: group }) => (
                   <TouchableOpacity
                     onPress={() => setSelectedGroup(group)}
@@ -86,7 +169,10 @@ export function ComponentSelector<T extends { id: number }>({
               <>
                 {selectedGroup && (
                   <TouchableOpacity
-                    onPress={() => setSelectedGroup(null)}
+                    onPress={() => {
+                      setSelectedGroup(null);
+                      setSearchQuery("");
+                    }}
                     className="flex-row items-center p-4 border-b border-border"
                   >
                     <IconSymbol name="chevron.left" size={20} color={colors.primary} />
@@ -94,9 +180,17 @@ export function ComponentSelector<T extends { id: number }>({
                   </TouchableOpacity>
                 )}
                 <FlatList
+                  style={{ flexGrow: 0, maxHeight: 320 }}
                   data={filteredItems}
                   keyExtractor={(item) => item.id.toString()}
                   contentContainerStyle={{ paddingBottom: 32 }}
+                  keyboardShouldPersistTaps="handled"
+                  keyboardDismissMode="on-drag"
+                  ListEmptyComponent={
+                    <Text className="p-4 text-center text-muted">
+                      Sin resultados
+                    </Text>
+                  }
                   renderItem={({ item }) => (
                     <TouchableOpacity
                       onPress={() => handleSelect(item)}
@@ -108,7 +202,8 @@ export function ComponentSelector<T extends { id: number }>({
                 />
               </>
             )}
-          </View>
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
     </View>

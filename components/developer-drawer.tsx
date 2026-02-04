@@ -1,9 +1,28 @@
 import { useColors } from "@/hooks/use-colors";
 import { useThemeContext } from "@/lib/theme-provider";
 import { router } from "expo-router";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { useEffect } from "react";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { IconSymbol } from "./ui/icon-symbol";
 import Logo from "./ui/logo";
+
+const DRAWER_WIDTH_PERCENT = 0.8;
+const ANIMATION_DURATION = 280;
+const SWIPE_THRESHOLD = 0.25;
 
 interface DeveloperDrawerProps {
   isOpen: boolean;
@@ -12,44 +31,127 @@ interface DeveloperDrawerProps {
 
 export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
   const colors = useColors();
+  const { width: screenWidth } = useWindowDimensions();
+  const drawerWidth = screenWidth * DRAWER_WIDTH_PERCENT;
   const { colorScheme, setColorScheme } = useThemeContext();
+
+  const translateX = useSharedValue(-drawerWidth);
+  const backdropOpacity = useSharedValue(0);
 
   const toggleTheme = () => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
   };
 
+  const closeDrawer = () => {
+    translateX.value = withTiming(
+      -drawerWidth,
+      { duration: ANIMATION_DURATION },
+      () => {
+        runOnJS(onClose)();
+      }
+    );
+    backdropOpacity.value = withTiming(0, { duration: ANIMATION_DURATION });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      translateX.value = withTiming(0, { duration: ANIMATION_DURATION });
+      backdropOpacity.value = withTiming(0.5, { duration: ANIMATION_DURATION });
+    } else {
+      translateX.value = -drawerWidth;
+      backdropOpacity.value = 0;
+    }
+    // translateX/backdropOpacity son refs estables; drawerWidth no debe retriggear
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  const panGesture = Gesture.Pan()
+    .activeOffsetX(-15)
+    .failOffsetY([-20, 20])
+    .onUpdate((e) => {
+      if (e.translationX < 0) {
+        translateX.value = e.translationX;
+        backdropOpacity.value = 0.5 * (1 + e.translationX / drawerWidth);
+      }
+    })
+    .onEnd((e) => {
+      const shouldClose =
+        e.translationX < -drawerWidth * SWIPE_THRESHOLD ||
+        e.velocityX < -300;
+      if (shouldClose) {
+        translateX.value = withTiming(
+          -drawerWidth,
+          { duration: ANIMATION_DURATION },
+          () => {
+            runOnJS(onClose)();
+          }
+        );
+        backdropOpacity.value = withTiming(0, { duration: ANIMATION_DURATION });
+      } else {
+        translateX.value = withTiming(0, { duration: ANIMATION_DURATION });
+        backdropOpacity.value = withTiming(0.5, { duration: ANIMATION_DURATION });
+      }
+    });
+
+  const drawerAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  const backdropAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: backdropOpacity.value,
+  }));
+
   return (
     <Modal
       visible={isOpen}
       transparent
-      animationType="fade"
-      onRequestClose={onClose}
+      animationType="none"
+      onRequestClose={closeDrawer}
     >
-      {/* Fondo semitransparente */}
-      <Pressable
-        style={{
-          flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-        }}
-        onPress={onClose}
-      >
-        {/* Drawer */}
+      <View style={{ flex: 1 }}>
+        {/* Fondo semitransparente - cubre toda la pantalla */}
         <Pressable
           style={{
-            flex: 1,
-            justifyContent: "flex-start",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           }}
-          onPress={(e) => e.stopPropagation()}
+          onPress={closeDrawer}
         >
-          <View
-            style={{
-              width: "80%",
-              height: "100%",
-              backgroundColor: colors.background,
-              borderRightColor: colors.border,
-              borderRightWidth: 1,
-            }}
+          <Animated.View
+            style={[
+              {
+                flex: 1,
+                backgroundColor: "black",
+              },
+              backdropAnimatedStyle,
+            ]}
+          />
+        </Pressable>
+
+        {/* Drawer con gestos */}
+        <GestureDetector gesture={panGesture}>
+          <Animated.View
+            style={[
+              {
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: drawerWidth,
+                height: "100%",
+                backgroundColor: colors.background,
+                borderRightColor: colors.border,
+                borderRightWidth: 1,
+              },
+              drawerAnimatedStyle,
+            ]}
           >
+            <Pressable
+              style={{ flex: 1 }}
+              onPress={(e) => e.stopPropagation()}
+            >
             <ScrollView
               style={{
                 flex: 1,
@@ -326,6 +428,10 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
                   </Text>
 
                   <Pressable
+                    onPress={() => {
+                      router.push("/info");
+                      closeDrawer();
+                    }}
                     style={{
                       paddingVertical: 8,
                       paddingHorizontal: 12,
@@ -341,10 +447,6 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
                         color: colors.background,
                         textAlign: "center",
                       }}
-                      onPress={() => {
-                        router.push("/info");
-                        onClose();
-                      }}
                     >
                       Información Completa
                     </Text>
@@ -355,7 +457,7 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
 
             {/* Botón de Cerrar */}
             <Pressable
-              onPress={onClose}
+              onPress={closeDrawer}
               style={{
                 paddingVertical: 16,
                 paddingHorizontal: 16,
@@ -376,9 +478,10 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
                 Cerrar
               </Text>
             </Pressable>
-          </View>
-        </Pressable>
-      </Pressable>
+          </Pressable>
+        </Animated.View>
+      </GestureDetector>
+      </View>
     </Modal>
   );
 }

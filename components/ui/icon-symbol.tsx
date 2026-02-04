@@ -36,6 +36,7 @@ const MAPPING = {
   "moon.fill": "dark-mode",
   "sun.max.fill": "wb-sunny",
   "list.bullet": "list",
+  "magnifyingglass": "search",
   "whatsapp.fill": "whatsapp",
   "phone.fill": "phone",
 } as IconMapping;

@@ -2,13 +2,13 @@ import { useColors } from "@/hooks/use-colors";
 import { StorageItem } from "@/shared/types";
 import { useState } from "react";
 import {
-    Alert,
-    FlatList,
-    Modal,
-    Pressable,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  Modal,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { IconSymbol } from "./ui/icon-symbol";
 
@@ -61,7 +61,7 @@ export function StorageManager({
   };
 
   return (
-    <View className="bg-surface rounded-2xl p-4 border border-border">
+    <View className="bg-surface rounded-2xl p-4 border border-border mb-10">
       <Text className="text-lg font-semibold text-foreground mb-3">
         Almacenamiento
       </Text>
@@ -98,7 +98,7 @@ export function StorageManager({
       {/* Botón agregar */}
       <TouchableOpacity
         onPress={() => setIsModalOpen(true)}
-        className="flex-row items-center justify-center gap-2 bg-primary py-3 rounded-xl"
+        className="flex-row items-center justify-center gap-2 bg-primary rounded-xl p-4"
       >
         <IconSymbol
           name="plus.circle.fill"
@@ -198,7 +198,7 @@ export function StorageManager({
             {/* Botón agregar */}
             <TouchableOpacity
               onPress={handleAdd}
-              className="bg-primary py-4 rounded-xl"
+              className="bg-primary py-4 rounded-xl mb-6 w-full"
             >
               <Text className="text-center text-background text-lg font-bold">
                 Agregar

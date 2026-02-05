@@ -5,8 +5,6 @@ import { ScrollView, Text, View } from "react-native";
 const BASE_CONSUMPTION = {
   motherboardDefault: 40,
   integratedGPU: 25,
-  ramDDR4PerModule: 3,
-  ramDDR5PerModule: 5,
   pciExpress1x4: 10,
   pciExpress1x8: 15,
   pciExpress1x16: 25,
@@ -35,10 +33,8 @@ export default function ResumenScreen() {
     total += config.gpu ? config.gpu.watts : BASE_CONSUMPTION.integratedGPU;
 
     // RAM
-    if (config.ramType === "DDR4") {
-      total += BASE_CONSUMPTION.ramDDR4PerModule * config.ramModules;
-    } else if (config.ramType === "DDR5") {
-      total += BASE_CONSUMPTION.ramDDR5PerModule * config.ramModules;
+    if (config.ramModule && config.ramModuleCount > 0) {
+      total += config.ramModule.powerPerModule * config.ramModuleCount;
     }
 
     // Storage
@@ -65,7 +61,7 @@ export default function ResumenScreen() {
     config.gpu ||
     config.motherboard ||
     config.cooling ||
-    config.ramModules > 0 ||
+    (config.ramModule != null && config.ramModuleCount > 0) ||
     config.storage.length > 0 ||
     config.opticalDrives > 0 ||
     config.pciExpress1x4 > 0 ||
@@ -195,24 +191,18 @@ export default function ResumenScreen() {
                   </View>
 
                   {/* RAM */}
-                  {config.ramModules > 0 && (
+                  {config.ramModule && config.ramModuleCount > 0 && (
                     <View className="flex-row justify-between items-center py-2 px-3 bg-background rounded-lg">
                       <View className="flex-1">
                         <Text className="text-base font-semibold text-foreground">
-                          RAM {config.ramType} ({config.ramModules} módulos)
+                          RAM {config.ramModule.type} {config.ramModule.speed} ({config.ramModuleCount} módulos)
                         </Text>
                         <Text className="text-sm text-muted">
-                          {config.ramType === "DDR4"
-                            ? `${BASE_CONSUMPTION.ramDDR4PerModule}W por módulo`
-                            : `${BASE_CONSUMPTION.ramDDR5PerModule}W por módulo`}
+                          {config.ramModule.powerPerModule}W por módulo
                         </Text>
                       </View>
                       <Text className="font-semibold text-primary">
-                        {(config.ramType === "DDR4"
-                          ? BASE_CONSUMPTION.ramDDR4PerModule
-                          : BASE_CONSUMPTION.ramDDR5PerModule) *
-                          config.ramModules}
-                        W
+                        {config.ramModule.powerPerModule * config.ramModuleCount}W
                       </Text>
                     </View>
                   )}

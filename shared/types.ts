@@ -54,6 +54,15 @@ export interface AiOCooler {
   description: string;
 }
 
+export interface RamModule {
+  id: number;
+  type: "DDR4" | "DDR5";
+  speed: string;
+  powerPerModule: number;
+  maxPowerPerModule: number;
+  description?: string | null;
+}
+
 export interface StorageItem {
   typeId: number;
   type: string;
@@ -74,8 +83,8 @@ export interface PCConfiguration {
   gpu: GPU | null;
   motherboard: MotherboardTier | null;
   cooling: AiOCooler | null;
-  ramType: "DDR4" | "DDR5" | null;
-  ramModules: number;
+  ramModule: RamModule | null;
+  ramModuleCount: number;
   storage: StorageItem[];
   pciExpress1x4: number;
   pciExpress1x8: number;

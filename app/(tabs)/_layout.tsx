@@ -23,7 +23,13 @@ export default function TabLayout() {
           headerShown: true,
 
           tabBarButton: HapticTab,
-          headerLeft: () => <Logo width={24} height={24} style={{ marginLeft: 16, marginRight: 8 }} />,
+          headerLeft: () => (
+            <Logo
+              width={50}
+              height={50}
+              style={{ marginLeft: 16, marginRight: 8 }}
+            />
+          ),
           headerRight: () => (
             <Pressable
               onPress={() => setDrawerOpen(true)}

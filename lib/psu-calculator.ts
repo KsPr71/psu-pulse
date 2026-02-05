@@ -8,8 +8,6 @@ import {
 const BASE_CONSUMPTION = {
   motherboardDefault: 40, // Fallback si no hay placa seleccionada
   integratedGPU: 25, // Gráfica integrada en CPU/placa base (~15-35W)
-  ramDDR4PerModule: 3,
-  ramDDR5PerModule: 5,
   pciExpress1x4: 10,
   pciExpress1x8: 15,
   pciExpress1x16: 25,
@@ -22,8 +20,12 @@ const SAFETY_MARGIN = 0.25;
 /**
  * Calcula consumo base (placa, RAM, storage, PCIe, ópticas, ventiladores, refrigeración)
  * Excluye CPU y GPU para poder variar entre TDP normal y overclock
+ * @param useOcRamPower - si true, usa maxPowerPerModule para RAM (XMP/EXPO)
  */
-function getBaseConsumption(config: PCConfiguration): number {
+function getBaseConsumption(
+  config: PCConfiguration,
+  useOcRamPower = false
+): number {
   let total = 0;
 
   // Motherboard - usa powerConsumption del tier seleccionado
@@ -33,11 +35,12 @@ function getBaseConsumption(config: PCConfiguration): number {
     total += BASE_CONSUMPTION.motherboardDefault;
   }
 
-  // RAM
-  if (config.ramType === "DDR4") {
-    total += BASE_CONSUMPTION.ramDDR4PerModule * config.ramModules;
-  } else if (config.ramType === "DDR5") {
-    total += BASE_CONSUMPTION.ramDDR5PerModule * config.ramModules;
+  // RAM - usa powerPerModule o maxPowerPerModule según modo OC
+  if (config.ramModule && config.ramModuleCount > 0) {
+    const wattsPerModule = useOcRamPower
+      ? config.ramModule.maxPowerPerModule
+      : config.ramModule.powerPerModule;
+    total += wattsPerModule * config.ramModuleCount;
   }
 
   // Almacenamiento
@@ -78,7 +81,7 @@ function buildPSUResult(totalWatts: number): PSUCalculation {
  * Calcula el consumo total y recomienda PSU (modo normal)
  */
 export function calculatePSU(config: PCConfiguration): PSUCalculation {
-  let totalWatts = getBaseConsumption(config);
+  let totalWatts = getBaseConsumption(config, false);
 
   if (config.processor) totalWatts += config.processor.watts;
   if (config.gpu) {
@@ -96,7 +99,7 @@ export function calculatePSU(config: PCConfiguration): PSUCalculation {
 export function calculatePSUWithOverclock(
   config: PCConfiguration
 ): PSUCalculationWithOC {
-  const baseWatts = getBaseConsumption(config);
+  const baseWatts = getBaseConsumption(config, false);
 
   const cpuWatts = config.processor?.watts ?? 0;
   const gpuWatts = config.gpu?.watts ?? BASE_CONSUMPTION.integratedGPU;
@@ -117,7 +120,8 @@ export function calculatePSUWithOverclock(
     const gpuOc = config.gpu
       ? (config.gpu.maxPowerOc ?? config.gpu.watts)
       : BASE_CONSUMPTION.integratedGPU; // iGPU sin overclock significativo
-    const totalOc = baseWatts + cpuOc + gpuOc;
+    const baseWattsOc = getBaseConsumption(config, true); // RAM con XMP/EXPO
+    const totalOc = baseWattsOc + cpuOc + gpuOc;
     overclocked = buildPSUResult(totalOc);
   }
 
@@ -179,7 +183,7 @@ export function validateConfiguration(config: PCConfiguration): {
 
   // GPU es opcional: null = gráfica integrada
 
-  if (!config.ramType || config.ramModules === 0) {
+  if (!config.ramModule || config.ramModuleCount === 0) {
     errors.push("Debe configurar la memoria RAM");
   }
 

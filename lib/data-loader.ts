@@ -4,6 +4,7 @@ import {
   GPU,
   MotherboardTier,
   Processor,
+  RamModule,
   StorageType,
 } from "@/shared/types";
 
@@ -39,12 +40,22 @@ interface RawMotherboard {
   [key: string]: unknown;
 }
 
+interface RawRamModule {
+  id: number;
+  type: string;
+  speed: string;
+  powerPerModule: number;
+  maxPowerPerModule: number;
+  description?: string | null;
+}
+
 let cachedData: {
   processors: Processor[];
   gpus: GPU[];
   storageTypes: StorageType[];
   motherboardTiers: MotherboardTier[];
   aioCoolers: AiOCooler[];
+  ramModules: RamModule[];
 } | null = null;
 
 /** URL local para desarrollo cuando Supabase no está disponible */
@@ -72,6 +83,17 @@ function normalizeGpu(g: RawGPU): GPU {
     series: g.series,
     watts,
     maxPowerOc: g.max_power_oc,
+  };
+}
+
+function normalizeRamModule(r: RawRamModule): RamModule {
+  return {
+    id: r.id,
+    type: (r.type === "DDR5" ? "DDR5" : "DDR4") as "DDR4" | "DDR5",
+    speed: r.speed ?? "",
+    powerPerModule: r.powerPerModule ?? 3,
+    maxPowerPerModule: r.maxPowerPerModule ?? 5,
+    description: r.description,
   };
 }
 
@@ -146,6 +168,7 @@ function transformData(raw: Record<string, unknown>) {
     normalizeMotherboard
   );
   const aioCoolers = (raw.aioCoolers as AiOCooler[]) || [];
+  const ramModules = ((raw.ramModules as RawRamModule[]) || []).map(normalizeRamModule);
 
   return {
     processors,
@@ -153,6 +176,7 @@ function transformData(raw: Record<string, unknown>) {
     storageTypes,
     motherboardTiers,
     aioCoolers,
+    ramModules,
   };
 }
 
@@ -179,6 +203,11 @@ export async function getMotherboardTiers(): Promise<MotherboardTier[]> {
 export async function getAiOCoolers(): Promise<AiOCooler[]> {
   const data = await loadData();
   return data?.aioCoolers || [];
+}
+
+export async function getRamModules(): Promise<RamModule[]> {
+  const data = await loadData();
+  return data?.ramModules || [];
 }
 
 export async function getProcessorsByBrand(brand: string): Promise<Processor[]> {

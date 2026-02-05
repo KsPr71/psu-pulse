@@ -25,13 +25,22 @@ describe("PSU Calculator", () => {
     maxPowerOc: 550,
   };
 
+  const mockRamDDR5 = {
+    id: 1,
+    type: "DDR5" as const,
+    speed: "6000MHz",
+    powerPerModule: 5,
+    maxPowerPerModule: 9,
+    description: "DDR5 6000MHz",
+  };
+
   const baseConfig: PCConfiguration = {
     processor: mockProcessor,
     gpu: mockGPU,
     motherboard: null,
     cooling: null,
-    ramType: "DDR5",
-    ramModules: 2,
+    ramModule: mockRamDDR5,
+    ramModuleCount: 2,
     storage: [],
     pciExpress1x4: 0,
     pciExpress1x8: 0,
@@ -60,7 +69,7 @@ describe("PSU Calculator", () => {
         ...baseConfig,
         processor: { ...mockProcessor, watts: 100 },
         gpu: { ...mockGPU, watts: 200 },
-        ramModules: 1,
+        ramModuleCount: 1,
       };
 
       const result = calculatePSU(config);
@@ -133,10 +142,17 @@ describe("PSU Calculator", () => {
     });
 
     it("should handle DDR4 RAM correctly", () => {
+      const mockRamDDR4 = {
+        id: 2,
+        type: "DDR4" as const,
+        speed: "3200MHz",
+        powerPerModule: 3,
+        maxPowerPerModule: 5,
+      };
       const ddr4Config: PCConfiguration = {
         ...baseConfig,
-        ramType: "DDR4",
-        ramModules: 4,
+        ramModule: mockRamDDR4,
+        ramModuleCount: 4,
       };
 
       const result = calculatePSU(ddr4Config);
@@ -147,8 +163,8 @@ describe("PSU Calculator", () => {
     it("should handle no RAM configuration", () => {
       const noRamConfig: PCConfiguration = {
         ...baseConfig,
-        ramType: null,
-        ramModules: 0,
+        ramModule: null,
+        ramModuleCount: 0,
       };
 
       const result = calculatePSU(noRamConfig);
@@ -208,9 +224,8 @@ describe("PSU Calculator", () => {
       expect(result.overclockAvailable).toBe(true);
       expect(result.overclocked).toBeDefined();
       expect(result.overclocked!.totalWatts).toBeGreaterThan(result.normal.totalWatts);
-      // OC: 40 + 340 + 550 + 10 = 940 (no mobo in base for this test - we have motherboard)
-      // With mobo 50: 50 + 340 + 550 + 10 = 950
-      expect(result.overclocked!.totalWatts).toBe(950);
+      // OC: mobo 50 + CPU 340 + GPU 550 + RAM max (9*2=18) = 958
+      expect(result.overclocked!.totalWatts).toBe(958);
     });
 
     it("should not return overclocked when motherboard does not support OC", () => {
@@ -253,8 +268,8 @@ describe("PSU Calculator", () => {
         ...baseConfig,
         gpu: null,
         processor: mockProcessor,
-        ramType: "DDR5" as const,
-        ramModules: 2,
+        ramModule: mockRamDDR5,
+        ramModuleCount: 2,
       };
       const result = validateConfiguration(config);
       expect(result.valid).toBe(true);
@@ -271,14 +286,14 @@ describe("PSU Calculator", () => {
     });
 
     it("should require RAM configuration", () => {
-      const config = { ...baseConfig, ramType: null, ramModules: 0 };
+      const config = { ...baseConfig, ramModule: null, ramModuleCount: 0 };
       const result = validateConfiguration(config);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain("Debe configurar la memoria RAM");
     });
 
     it("should require RAM modules when type is selected", () => {
-      const config = { ...baseConfig, ramModules: 0 };
+      const config = { ...baseConfig, ramModuleCount: 0 };
       const result = validateConfiguration(config);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain("Debe configurar la memoria RAM");

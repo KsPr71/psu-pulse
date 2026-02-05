@@ -5,6 +5,7 @@ import {
     getMotherboardTiers,
     getProcessorBrands,
     getProcessors,
+    getRamModules,
     getStorageTypes,
 } from "@/lib/data-loader";
 import {
@@ -12,6 +13,7 @@ import {
     GPU,
     MotherboardTier,
     Processor,
+    RamModule,
     StorageType,
 } from "@/shared/types";
 import { useEffect, useState } from "react";
@@ -83,6 +85,21 @@ export function useAiOCoolers() {
 
   useEffect(() => {
     getAiOCoolers()
+      .then(setData)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { data, loading, error };
+}
+
+export function useRamModules() {
+  const [data, setData] = useState<RamModule[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    getRamModules()
       .then(setData)
       .catch(setError)
       .finally(() => setLoading(false));

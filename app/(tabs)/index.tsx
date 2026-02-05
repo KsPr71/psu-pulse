@@ -18,6 +18,7 @@ import {
   useGPUs,
   useMotherboardTiers,
   useProcessors,
+  useRamModules,
   useStorageTypes,
 } from "@/hooks/use-components";
 import { useConfig } from "@/lib/config-provider";
@@ -42,6 +43,7 @@ export default function CalculatorScreen() {
   const { data: storageTypes, loading: loadingStorage } = useStorageTypes();
   const { data: motherboardTiers, loading: loadingMotherboards } = useMotherboardTiers();
   const { data: aioCoolers, loading: loadingCoolers } = useAiOCoolers();
+  const { data: ramModules, loading: loadingRam } = useRamModules();
 
   const handleCalculate = () => {
     const validation = validateConfiguration(config);
@@ -78,8 +80,8 @@ export default function CalculatorScreen() {
       gpu: null,
       motherboard: null,
       cooling: null,
-      ramType: null,
-      ramModules: 0,
+      ramModule: null,
+      ramModuleCount: 0,
       storage: [],
       pciExpress1x4: 0,
       pciExpress1x8: 0,
@@ -97,7 +99,8 @@ export default function CalculatorScreen() {
     loadingGPUs ||
     loadingStorage ||
     loadingMotherboards ||
-    loadingCoolers;
+    loadingCoolers ||
+    loadingRam;
 
   if (isLoading) {
     return (
@@ -184,38 +187,21 @@ export default function CalculatorScreen() {
             <Text className="text-lg font-semibold text-foreground mb-3">
               Memoria RAM
             </Text>
-            <Text className="text-sm text-muted mb-2">Tipo de RAM</Text>
-            <View className="flex-row gap-2 mb-4">
-              {["DDR4", "DDR5"].map((type) => (
-                <Pressable
-                  key={type}
-                  onPress={() => setConfig({ ...config, ramType: type as any })}
-                  className={`flex-1 py-2 px-3 rounded-lg border ${
-                    config.ramType === type
-                      ? "bg-primary border-primary"
-                      : "bg-background border-border"
-                  }`}
-                >
-                  <Text
-                    className={`text-center font-medium ${
-                      config.ramType === type
-                        ? "text-background"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {type}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-
-            <Text className="text-sm text-muted mb-2">Número de módulos</Text>
+            <ComponentSelector
+              title="Tipo de módulo"
+              items={ramModules}
+              selectedItem={config.ramModule}
+              onSelect={(r) => setConfig({ ...config, ramModule: r })}
+              renderItem={(r) => `${r.type} ${r.speed} — ${r.powerPerModule}W/módulo`}
+              groupBy="type"
+            />
+            <Text className="text-sm text-muted mb-2 mt-2">Número de módulos</Text>
             <View className="flex-row items-center justify-center gap-4">
               <Pressable
                 onPress={() =>
                   setConfig({
                     ...config,
-                    ramModules: Math.max(0, config.ramModules - 1),
+                    ramModuleCount: Math.max(0, config.ramModuleCount - 1),
                   })
                 }
               >
@@ -224,11 +210,11 @@ export default function CalculatorScreen() {
                 </Text>
               </Pressable>
               <Text className="text-3xl font-bold text-foreground w-12 text-center">
-                {config.ramModules}
+                {config.ramModuleCount}
               </Text>
               <Pressable
                 onPress={() =>
-                  setConfig({ ...config, ramModules: config.ramModules + 1 })
+                  setConfig({ ...config, ramModuleCount: config.ramModuleCount + 1 })
                 }
               >
                 <Text className="text-2xl font-bold text-primary px-4 py-2">

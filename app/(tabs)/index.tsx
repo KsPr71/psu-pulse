@@ -36,12 +36,15 @@ export default function CalculatorScreen() {
   const colors = useColors();
   const scrollViewRef = useRef<ScrollView>(null);
   const { config, setConfig, setResult, setResultWithOC } = useConfig();
-  const [resultWithOC, setLocalResult] = useState<PSUCalculationWithOC | null>(null);
+  const [resultWithOC, setLocalResult] = useState<PSUCalculationWithOC | null>(
+    null,
+  );
 
   const { data: processors, loading: loadingProcessors } = useProcessors();
   const { data: gpus, loading: loadingGPUs } = useGPUs();
   const { data: storageTypes, loading: loadingStorage } = useStorageTypes();
-  const { data: motherboardTiers, loading: loadingMotherboards } = useMotherboardTiers();
+  const { data: motherboardTiers, loading: loadingMotherboards } =
+    useMotherboardTiers();
   const { data: aioCoolers, loading: loadingCoolers } = useAiOCoolers();
   const { data: ramModules, loading: loadingRam } = useRamModules();
 
@@ -192,11 +195,19 @@ export default function CalculatorScreen() {
               items={ramModules}
               selectedItem={config.ramModule}
               onSelect={(r) => setConfig({ ...config, ramModule: r })}
-              renderItem={(r) => `${r.type} ${r.speed} — ${r.powerPerModule}W/módulo`}
+              renderItem={(r) =>
+                `${r.type} ${r.speed} — ${r.powerPerModule}W/módulo`
+              }
               groupBy="type"
             />
-            <Text className="text-sm text-muted mb-2 mt-2">Número de módulos</Text>
-            <View className="flex-row items-center justify-center gap-4">
+            <Text className="text-sm text-muted mb-2 mt-2">
+              Número de módulos
+            </Text>
+            <View
+              className="flex-row items-center justify-center gap-4"
+              style={{ opacity: config.ramModule ? 1 : 0.5 }}
+              pointerEvents={config.ramModule ? "auto" : "none"}
+            >
               <Pressable
                 onPress={() =>
                   setConfig({
@@ -204,6 +215,7 @@ export default function CalculatorScreen() {
                     ramModuleCount: Math.max(0, config.ramModuleCount - 1),
                   })
                 }
+                disabled={!config.ramModule}
               >
                 <Text className="text-2xl font-bold text-primary px-4 py-2">
                   −
@@ -213,11 +225,17 @@ export default function CalculatorScreen() {
                 {config.ramModuleCount}
               </Text>
               <Pressable
-                onPress={() =>
-                  setConfig({ ...config, ramModuleCount: config.ramModuleCount + 1 })
-                }
+                onPress={() => {
+                  if (config.ramModule && config.ramModuleCount < 8) {
+                    setConfig({
+                      ...config,
+                      ramModuleCount: config.ramModuleCount + 1,
+                    });
+                  }
+                }}
+                disabled={!config.ramModule || config.ramModuleCount >= 8}
               >
-                <Text className="text-2xl font-bold text-primary px-4 py-2">
+                <Text className="text-2xl font-bold text-primary px-4 py-2 style={{ opacity: config.ramModuleCount >= 8 ? 0 : 1 }}">
                   +
                 </Text>
               </Pressable>

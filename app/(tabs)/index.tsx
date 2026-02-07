@@ -200,46 +200,50 @@ export default function CalculatorScreen() {
               }
               groupBy="type"
             />
-            <Text className="text-sm text-muted mb-2 mt-2">
-              Número de módulos
-            </Text>
-            <View
-              className="flex-row items-center justify-center gap-4"
-              style={{ opacity: config.ramModule ? 1 : 0.5 }}
-              pointerEvents={config.ramModule ? "auto" : "none"}
-            >
-              <Pressable
-                onPress={() =>
-                  setConfig({
-                    ...config,
-                    ramModuleCount: Math.max(0, config.ramModuleCount - 1),
-                  })
-                }
-                disabled={!config.ramModule}
-              >
-                <Text className="text-2xl font-bold text-primary px-4 py-2">
-                  −
+            {config.ramModule ? (
+              <View>
+                <Text className="text-sm text-muted mb-2 mt-2">
+                  Número de módulos
                 </Text>
-              </Pressable>
-              <Text className="text-3xl font-bold text-foreground w-12 text-center">
-                {config.ramModuleCount}
-              </Text>
-              <Pressable
-                onPress={() => {
-                  if (config.ramModule && config.ramModuleCount < 8) {
-                    setConfig({
-                      ...config,
-                      ramModuleCount: config.ramModuleCount + 1,
-                    });
-                  }
-                }}
-                disabled={!config.ramModule || config.ramModuleCount >= 8}
-              >
-                <Text className="text-2xl font-bold text-primary px-4 py-2 style={{ opacity: config.ramModuleCount >= 8 ? 0 : 1 }}">
-                  +
-                </Text>
-              </Pressable>
-            </View>
+                <View
+                  className="flex-row items-center justify-center gap-4"
+                  style={{ opacity: config.ramModule ? 1 : 0.5 }}
+                  pointerEvents={config.ramModule ? "auto" : "none"}
+                >
+                  <Pressable
+                    onPress={() =>
+                      setConfig({
+                        ...config,
+                        ramModuleCount: Math.max(0, config.ramModuleCount - 1),
+                      })
+                    }
+                    disabled={!config.ramModule}
+                  >
+                    <Text className="text-2xl font-bold text-primary px-4 py-2">
+                      −
+                    </Text>
+                  </Pressable>
+                  <Text className="text-3xl font-bold text-foreground w-12 text-center">
+                    {config.ramModuleCount}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      if (config.ramModule && config.ramModuleCount < 8) {
+                        setConfig({
+                          ...config,
+                          ramModuleCount: config.ramModuleCount + 1,
+                        });
+                      }
+                    }}
+                    disabled={!config.ramModule || config.ramModuleCount >= 8}
+                  >
+                    <Text className="text-2xl font-bold text-primary px-4 py-2 style={{ opacity: config.ramModuleCount >= 8 ? 0 : 1 }}">
+                      +
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : null}
           </View>
 
           <StorageManager

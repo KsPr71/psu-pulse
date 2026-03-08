@@ -3,19 +3,22 @@ import { useThemeContext } from "@/lib/theme-provider";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import {
-    Modal,
-    Pressable,
-    ScrollView,
-    Text,
-    View,
-    useWindowDimensions,
+  Image,
+  Linking,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 import { IconSymbol } from "./ui/icon-symbol";
 import Logo from "./ui/logo";
@@ -37,6 +40,7 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
 
   const translateX = useSharedValue(-drawerWidth);
   const backdropOpacity = useSharedValue(0);
+  const pictureDev = require("@/assets/images/novadev1.png");
 
   const toggleTheme = () => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
@@ -48,7 +52,7 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
       { duration: ANIMATION_DURATION },
       () => {
         runOnJS(onClose)();
-      }
+      },
     );
     backdropOpacity.value = withTiming(0, { duration: ANIMATION_DURATION });
   };
@@ -76,20 +80,21 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
     })
     .onEnd((e) => {
       const shouldClose =
-        e.translationX < -drawerWidth * SWIPE_THRESHOLD ||
-        e.velocityX < -300;
+        e.translationX < -drawerWidth * SWIPE_THRESHOLD || e.velocityX < -300;
       if (shouldClose) {
         translateX.value = withTiming(
           -drawerWidth,
           { duration: ANIMATION_DURATION },
           () => {
             runOnJS(onClose)();
-          }
+          },
         );
         backdropOpacity.value = withTiming(0, { duration: ANIMATION_DURATION });
       } else {
         translateX.value = withTiming(0, { duration: ANIMATION_DURATION });
-        backdropOpacity.value = withTiming(0.5, { duration: ANIMATION_DURATION });
+        backdropOpacity.value = withTiming(0.5, {
+          duration: ANIMATION_DURATION,
+        });
       }
     });
 
@@ -148,339 +153,363 @@ export function DeveloperDrawer({ isOpen, onClose }: DeveloperDrawerProps) {
               drawerAnimatedStyle,
             ]}
           >
-            <Pressable
-              style={{ flex: 1 }}
-              onPress={(e) => e.stopPropagation()}
-            >
-            <ScrollView
-              style={{
-                flex: 1,
-              }}
-              contentContainerStyle={{
-                paddingTop: 20,
-              }}
-            >
-              {/* Header */}
-              <View
+            <Pressable style={{ flex: 1 }} onPress={(e) => e.stopPropagation()}>
+              <ScrollView
                 style={{
-                  paddingHorizontal: 16,
-                  paddingBottom: 20,
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                  flexDirection: "row",
+                  flex: 1,
+                }}
+                contentContainerStyle={{
+                  paddingTop: 20,
                 }}
               >
-                <Logo width={60} height={60} />
+                {/* Header */}
                 <View
                   style={{
-                    flex: 1,
-                    flexDirection: "column",
-                    // marginLeft: 12,
-
-                    alignItems: "center",
-                    marginTop: 10,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      fontWeight: "700",
-                      color: colors.foreground,
-                      marginBottom: 4,
-                    }}
-                  >
-                    PSU Pulse
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.muted,
-                    }}
-                  >
-                    v1.0.0
-                  </Text>
-                </View>
-              </View>
-
-              {/* Modo Oscuro/Claro */}
-              <View
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 20,
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: colors.foreground,
-                    marginBottom: 12,
-                  }}
-                >
-                  Apariencia
-                </Text>
-
-                <Pressable
-                  onPress={toggleTheme}
-                  style={{
-                    backgroundColor: colors.surface,
-                    borderRadius: 12,
-                    padding: 12,
-                    borderColor: colors.border,
-                    borderWidth: 1,
+                    paddingHorizontal: 16,
+                    paddingBottom: 20,
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: 1,
                     flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
                   }}
                 >
+                  <Logo width={60} height={60} />
                   <View
                     style={{
-                      flexDirection: "row",
+                      flex: 1,
+                      flexDirection: "column",
+                      // marginLeft: 12,
+
                       alignItems: "center",
-                      gap: 10,
+                      marginTop: 10,
                     }}
                   >
-                    <IconSymbol
-                      size={20}
-                      name={
-                        colorScheme === "dark" ? "moon.fill" : "sun.max.fill"
-                      }
-                      color={colors.primary}
-                    />
                     <Text
                       style={{
-                        fontSize: 14,
-                        fontWeight: "500",
+                        fontSize: 24,
+                        fontWeight: "700",
                         color: colors.foreground,
+                        marginBottom: 4,
                       }}
                     >
-                      {colorScheme === "dark" ? "Modo Oscuro" : "Modo Claro"}
+                      PSU Pulse
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: colors.muted,
+                      }}
+                    >
+                      v1.0.0
                     </Text>
                   </View>
-                  <View
+                </View>
+
+                {/* Modo Oscuro/Claro */}
+                <View
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 20,
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: 1,
+                  }}
+                >
+                  <Text
                     style={{
-                      width: 50,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor:
-                        colorScheme === "dark" ? colors.primary : colors.border,
-                      justifyContent: "center",
-                      paddingHorizontal: 2,
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: colors.foreground,
+                      marginBottom: 12,
+                    }}
+                  >
+                    Apariencia
+                  </Text>
+
+                  <Pressable
+                    onPress={toggleTheme}
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderRadius: 12,
+                      padding: 12,
+                      borderColor: colors.border,
+                      borderWidth: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
                     <View
                       style={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: 12,
-                        backgroundColor: colors.background,
-                        marginLeft: colorScheme === "dark" ? 22 : 0,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 10,
                       }}
-                    />
-                  </View>
-                </Pressable>
-              </View>
-              {/* Información del Desarrollador */}
-              <View
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 20,
-                  borderBottomColor: colors.border,
-                  borderBottomWidth: 1,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: colors.foreground,
-                    marginBottom: 12,
-                  }}
-                >
-                  Desarrollador
-                </Text>
-
+                    >
+                      <IconSymbol
+                        size={20}
+                        name={
+                          colorScheme === "dark" ? "moon.fill" : "sun.max.fill"
+                        }
+                        color={colors.primary}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "500",
+                          color: colors.foreground,
+                        }}
+                      >
+                        {colorScheme === "dark" ? "Modo Oscuro" : "Modo Claro"}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: 50,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor:
+                          colorScheme === "dark"
+                            ? colors.primary
+                            : colors.border,
+                        justifyContent: "center",
+                        paddingHorizontal: 2,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 12,
+                          backgroundColor: colors.background,
+                          marginLeft: colorScheme === "dark" ? 22 : 0,
+                        }}
+                      />
+                    </View>
+                  </Pressable>
+                </View>
+                {/* Información del Desarrollador */}
                 <View
                   style={{
-                    backgroundColor: colors.surface,
-                    borderRadius: 12,
-                    padding: 12,
-                    borderColor: colors.border,
-                    borderWidth: 1,
+                    paddingHorizontal: 16,
+                    paddingVertical: 20,
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: 1,
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: "600",
                       color: colors.foreground,
-                      marginBottom: 4,
+                      marginBottom: 12,
                     }}
                   >
-                    Jorge A. Casares Delgado
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.muted,
-                      marginBottom: 8,
-                    }}
-                  >
-                    Full Stack Developer
+                    Desarrollador
                   </Text>
 
-                  {/* Contacto */}
                   <View
                     style={{
-                      gap: 8,
-                      marginTop: 12,
-                      paddingTop: 12,
-                      borderTopColor: colors.border,
-                      borderTopWidth: 1,
+                      backgroundColor: colors.surface,
+                      borderRadius: 12,
+                      padding: 12,
+                      borderColor: colors.border,
+                      borderWidth: 1,
                     }}
                   >
-                    <Pressable
+                    <Text
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 8,
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: colors.foreground,
+                        marginBottom: 4,
                       }}
                     >
-                      <IconSymbol
-                        size={16}
-                        name="envelope.fill"
-                        color={colors.primary}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: colors.primary,
-                        }}
-                      >
-                        jorgealejandrocasaresdelgado@gmail.com
-                      </Text>
-                    </Pressable>
+                      NOVADEV
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: colors.muted,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Transformados ideas en software
+                    </Text>
 
-                    <Pressable
+                    {/* Contacto */}
+                    <View
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
                         gap: 8,
+                        marginTop: 12,
+                        paddingTop: 12,
+                        borderTopColor: colors.border,
+                        borderTopWidth: 1,
                       }}
                     >
-                      <IconSymbol
-                        size={16}
-                        name="phone.fill"
-                        color={colors.primary}
-                      />
-                      <Text
+                      <Pressable
                         style={{
-                          fontSize: 12,
-                          color: colors.primary,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 8,
                         }}
                       >
-                        +5352708602
-                      </Text>
-                    </Pressable>
+                        <IconSymbol
+                          size={16}
+                          name="envelope.fill"
+                          color={colors.primary}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: colors.primary,
+                          }}
+                        >
+                          novadev2026@gmail.com
+                        </Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
+                        <IconSymbol
+                          size={16}
+                          name="phone.fill"
+                          color={colors.primary}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: colors.primary,
+                          }}
+                        >
+                          +5356931759
+                        </Text>
+                      </Pressable>
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() =>
+                          Linking.openURL(
+                            "https://landing-page-ten-pi-77.vercel.app/",
+                          )
+                        }
+                        style={{
+                          borderWidth: 1,
+                          borderColor: colors.primary,
+                          borderRadius: 10,
+                          marginVertical: 10,
+                          backgroundColor: "#fff",
+                        }}
+                      >
+                        <Image
+                          source={pictureDev}
+                          style={{
+                            width: "100%",
+                            height: 50,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              {/* Acerca de */}
-              <View
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 20,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: colors.foreground,
-                    marginBottom: 12,
-                  }}
-                >
-                  Acerca de
-                </Text>
-
+                {/* Acerca de */}
                 <View
                   style={{
-                    backgroundColor: colors.surface,
-                    borderRadius: 12,
-                    padding: 12,
-                    borderColor: colors.border,
-                    borderWidth: 1,
-                    gap: 10,
+                    paddingHorizontal: 16,
+                    paddingVertical: 20,
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
+                      fontWeight: "600",
                       color: colors.foreground,
-                      lineHeight: 18,
+                      marginBottom: 12,
                     }}
                   >
-                    PSU Pulse es una aplicación para calcular la fuente de
-                    alimentación (PSU) requerida para tu PC.
+                    Acerca de
                   </Text>
 
-                  <Pressable
-                    onPress={() => {
-                      router.push("/info");
-                      closeDrawer();
-                    }}
+                  <View
                     style={{
-                      paddingVertical: 8,
-                      paddingHorizontal: 12,
-                      backgroundColor: colors.primary,
-                      borderRadius: 8,
-                      marginTop: 4,
+                      backgroundColor: colors.surface,
+                      borderRadius: 12,
+                      padding: 12,
+                      borderColor: colors.border,
+                      borderWidth: 1,
+                      gap: 10,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 12,
-                        fontWeight: "600",
-                        color: colors.background,
-                        textAlign: "center",
+                        color: colors.foreground,
+                        lineHeight: 18,
                       }}
                     >
-                      Información Completa
+                      PSU Pulse es una aplicación para calcular la fuente de
+                      alimentación (PSU) requerida para tu PC.
                     </Text>
-                  </Pressable>
-                </View>
-              </View>
-            </ScrollView>
 
-            {/* Botón de Cerrar */}
-            <Pressable
-              onPress={closeDrawer}
-              style={{
-                paddingVertical: 16,
-                paddingHorizontal: 16,
-                borderTopColor: colors.border,
-                borderTopWidth: 1,
-                backgroundColor: colors.surface,
-                marginBottom: 30,
-              }}
-            >
-              <Text
+                    <TouchableOpacity
+                      onPress={() => {
+                        router.push("/info");
+                        closeDrawer();
+                      }}
+                      style={{
+                        paddingVertical: 8,
+                        paddingHorizontal: 12,
+                        backgroundColor: colors.primary,
+                        borderRadius: 8,
+                        marginTop: 4,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: "600",
+                          color: colors.background,
+                          textAlign: "center",
+                        }}
+                      >
+                        Información Completa
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+
+              {/* Botón de Cerrar */}
+              <Pressable
+                onPress={closeDrawer}
                 style={{
-                  fontSize: 14,
-                  fontWeight: "600",
-                  color: colors.primary,
-                  textAlign: "center",
+                  paddingVertical: 16,
+                  paddingHorizontal: 16,
+                  borderTopColor: colors.border,
+                  borderTopWidth: 1,
+                  backgroundColor: colors.surface,
+                  marginBottom: 30,
                 }}
               >
-                Cerrar
-              </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "600",
+                    color: colors.primary,
+                    textAlign: "center",
+                  }}
+                >
+                  Cerrar
+                </Text>
+              </Pressable>
             </Pressable>
-          </Pressable>
-        </Animated.View>
-      </GestureDetector>
+          </Animated.View>
+        </GestureDetector>
       </View>
     </Modal>
   );

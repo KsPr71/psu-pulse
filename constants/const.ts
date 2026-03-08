@@ -1,7 +1,7 @@
 /** Supabase Storage - bucket público para datos de hardware (processors, gpus, storage) */
 const SUPABASE_URL =
   (typeof process !== "undefined" && process.env?.EXPO_PUBLIC_SUPABASE_URL) ||
-  "https://zcnbqternopttcixibkw.supabase.co";
+  "https://djxvosobflwtryenqoou.supabase.co";
 const HARDWARE_BUCKET = "hardware-data";
 
 export const COMPONENTS_DATA_URL = `${SUPABASE_URL}/storage/v1/object/public/${HARDWARE_BUCKET}/components.json`;

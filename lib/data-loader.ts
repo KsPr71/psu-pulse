@@ -1,5 +1,9 @@
 import { COMPONENTS_DATA_URL } from "@/constants/const";
 import {
+  readComponentsFromSQLite,
+  writeComponentsToSQLite,
+} from "@/lib/components-cache-sqlite";
+import {
   AiOCooler,
   GPU,
   MotherboardTier,
@@ -118,6 +122,16 @@ async function loadData() {
     return cachedData;
   }
 
+  const sqliteRaw = await readComponentsFromSQLite();
+  if (sqliteRaw) {
+    try {
+      cachedData = transformData(sqliteRaw);
+      return cachedData;
+    } catch (error) {
+      console.warn("SQLite cache payload invalid, refreshing from network", error);
+    }
+  }
+
   const url = COMPONENTS_DATA_URL;
 
   try {
@@ -131,6 +145,7 @@ async function loadData() {
         if (fallback.ok) {
           const raw = await fallback.json();
           cachedData = transformData(raw);
+          await writeComponentsToSQLite(raw as Record<string, unknown>);
           return cachedData;
         }
       }
@@ -138,6 +153,7 @@ async function loadData() {
     }
     const raw = await response.json();
     cachedData = transformData(raw);
+    await writeComponentsToSQLite(raw as Record<string, unknown>);
     return cachedData;
   } catch (error) {
     if (url !== FALLBACK_URL) {
@@ -146,6 +162,7 @@ async function loadData() {
         if (fallback.ok) {
           const raw = await fallback.json();
           cachedData = transformData(raw);
+          await writeComponentsToSQLite(raw as Record<string, unknown>);
           return cachedData;
         }
       } catch {
